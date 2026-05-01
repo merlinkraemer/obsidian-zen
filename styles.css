@@ -1,0 +1,262 @@
+/* Obsidian Zen - tweaks toggled via plugin settings */
+
+/* === Tab header at bottom of sidebar === */
+body.zen-tab-header-bottom .workspace-tabs.mod-top-left-space,
+body.zen-tab-header-bottom .workspace-tabs.mod-top-right-space {
+  flex-direction: column;
+}
+
+body.zen-tab-header-bottom
+  .workspace-tabs.mod-top-left-space
+  > .workspace-tab-container,
+body.zen-tab-header-bottom
+  .workspace-tabs.mod-top-right-space
+  > .workspace-tab-container {
+  order: 1;
+}
+
+body.zen-tab-header-bottom
+  .workspace-tabs.mod-top-left-space
+  > .workspace-tab-header-container,
+body.zen-tab-header-bottom
+  .workspace-tabs.mod-top-right-space
+  > .workspace-tab-header-container {
+  order: 2;
+  border-top: var(--tab-outline-width) solid var(--tab-outline-color);
+  border-bottom: none;
+}
+
+/* === Split tab header — tabs at top, action icons pinned to bottom ===
+   When this is on, override `tab-header-bottom` so layout doesn't fight us. */
+body.zen-split-tab-header .workspace-tabs.mod-top-left-space,
+body.zen-split-tab-header .workspace-tabs.mod-top-right-space {
+  position: relative !important;
+  flex-direction: column !important;
+}
+body.zen-split-tab-header
+  .workspace-tabs.mod-top-left-space
+  > .workspace-tab-container,
+body.zen-split-tab-header
+  .workspace-tabs.mod-top-right-space
+  > .workspace-tab-container {
+  order: 2 !important;
+  padding-bottom: 40px !important;
+}
+body.zen-split-tab-header
+  .workspace-tabs.mod-top-left-space
+  > .workspace-tab-header-container,
+body.zen-split-tab-header
+  .workspace-tabs.mod-top-right-space
+  > .workspace-tab-header-container {
+  order: 1 !important;
+  position: static !important;
+  border-bottom: var(--tab-outline-width) solid var(--tab-outline-color);
+  border-top: none;
+}
+
+/* Pin action icons to bottom-right, anchored to .workspace-tabs.
+   Each clickable icon button is ~28px wide; offsets stack them. */
+body.zen-split-tab-header
+  .workspace-tabs.mod-top-left-space
+  .workspace-tab-header-new-tab:not(.zen-daily-note-button),
+body.zen-split-tab-header
+  .workspace-tabs.mod-top-right-space
+  .workspace-tab-header-new-tab:not(.zen-daily-note-button),
+body.zen-split-tab-header
+  .workspace-tabs.mod-top-left-space
+  .workspace-tab-header-tab-list,
+body.zen-split-tab-header
+  .workspace-tabs.mod-top-right-space
+  .workspace-tab-header-tab-list,
+body.zen-split-tab-header
+  .workspace-tabs.mod-top-left-space
+  .sidebar-toggle-button.mod-left,
+body.zen-split-tab-header
+  .workspace-tabs.mod-top-right-space
+  .sidebar-toggle-button.mod-right,
+body.zen-split-tab-header
+  .workspace-tabs.mod-top-left-space
+  .zen-daily-note-button,
+body.zen-split-tab-header
+  .workspace-tabs.mod-top-right-space
+  .zen-daily-note-button {
+  position: absolute !important;
+  bottom: 6px !important;
+  z-index: 10;
+}
+
+body.zen-split-tab-header .workspace-tabs .sidebar-toggle-button {
+  right: 4px !important;
+}
+body.zen-split-tab-header .workspace-tabs .workspace-tab-header-tab-list {
+  right: 36px !important;
+}
+body.zen-split-tab-header
+  .workspace-tabs
+  .workspace-tab-header-new-tab:not(.zen-daily-note-button) {
+  right: 68px !important;
+}
+body.zen-split-tab-header .workspace-tabs .zen-daily-note-button {
+  right: 100px !important;
+}
+
+/* === Right-align icons in tab header === */
+body.zen-tab-header-right
+  .workspace-tabs.mod-top-left-space
+  > .workspace-tab-header-container
+  > .workspace-tab-header-spacer,
+body.zen-tab-header-right
+  .workspace-tabs.mod-top-right-space
+  > .workspace-tab-header-container
+  > .workspace-tab-header-spacer {
+  order: -1;
+  flex: 1 1 auto;
+}
+
+/* === Roomy sidebar === */
+body.zen-roomy-sidebar.zen-tab-header-bottom
+  .workspace-split.mod-left-split
+  .workspace-tab-container,
+body.zen-roomy-sidebar.zen-tab-header-bottom
+  .workspace-split.mod-right-split
+  .workspace-tab-container {
+  padding-top: var(--size-4-4);
+}
+
+body.zen-roomy-sidebar
+  .workspace-leaf-content[data-type="file-explorer"]
+  .nav-header {
+  padding: var(--size-4-2) var(--size-4-3) var(--size-4-3);
+}
+
+body.zen-roomy-sidebar
+  .workspace-leaf-content[data-type="file-explorer"]
+  .tree-item-self {
+  min-height: var(--size-4-8) !important;
+  display: flex !important;
+  align-items: center !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+body.zen-roomy-sidebar
+  .workspace-leaf-content[data-type="file-explorer"]
+  .nav-folder,
+body.zen-roomy-sidebar
+  .workspace-leaf-content[data-type="file-explorer"]
+  .nav-file {
+  margin-bottom: 1px;
+}
+
+/* === Hide tree indent guide lines === */
+body.zen-hide-tree-lines
+  .workspace-leaf-content[data-type="file-explorer"]
+  .tree-item-children {
+  border-inline-start: none !important;
+  background-image: none !important;
+}
+body.zen-hide-tree-lines
+  .workspace-leaf-content[data-type="file-explorer"]
+  .nav-folder-children {
+  border-inline-start: none !important;
+}
+
+/* === Sidebar tab header icons === */
+body.zen-hide-new-tab .workspace-tab-header-new-tab {
+  display: none !important;
+}
+body.zen-hide-tab-list .workspace-tab-header-tab-list {
+  display: none !important;
+}
+body.zen-hide-sidebar-toggle .sidebar-toggle-button.mod-right,
+body.zen-hide-sidebar-toggle .sidebar-toggle-button.mod-left {
+  display: none !important;
+}
+/* macOS frameless: when sidebar toggles are hidden, reserve space for the
+   traffic lights on the left and trim the right tab-header padding. */
+body.zen-hide-sidebar-toggle.mod-macos {
+  --frame-left-space: 60px;
+}
+body.zen-hide-sidebar-toggle.mod-macos.is-hidden-frameless:not(.is-popout-window)
+  .workspace
+  .workspace-tabs.mod-top-right-space
+  .workspace-tab-header-container {
+  padding-right: 4px;
+}
+
+/* === File explorer header === */
+body.zen-hide-file-nav-header
+  .workspace-leaf-content[data-type="file-explorer"]
+  .nav-header {
+  display: none !important;
+}
+
+/* === Editor === */
+body.zen-no-line-highlight .cm-active {
+  background-color: transparent !important;
+}
+body.zen-hide-properties-reading .markdown-reading-view .metadata-container {
+  display: none !important;
+}
+
+/* === Window chrome (ports of obsidian-hider) === */
+body.zen-hide-root-tabs .mod-root .workspace-tabs .workspace-tab-header-container {
+  display: none !important;
+}
+/* When the root tab bar is hidden on macOS, push the view-header right
+   so the title text doesn't slide under the traffic lights. */
+body.zen-hide-root-tabs .mod-top-left-space .view-header {
+  padding-left: var(--frame-left-space);
+}
+body.zen-hide-status-bar .status-bar {
+  display: none !important;
+}
+body.zen-hide-vault-name .workspace-sidedock-vault-profile,
+body.zen-hide-vault-name:not(.is-mobile)
+  .workspace-split.mod-left-split
+  .workspace-sidedock-vault-profile {
+  display: none !important;
+}
+body.zen-hide-scrollbars ::-webkit-scrollbar {
+  display: none !important;
+}
+body.zen-hide-tooltips .tooltip {
+  display: none !important;
+}
+
+/* === Search & modals === */
+body.zen-hide-search-suggestions
+  .suggestion-container.mod-search-suggestion {
+  display: none !important;
+}
+body.zen-hide-search-counts .tree-item-flair:not(.tag-pane-tag-count) {
+  display: none !important;
+}
+body.zen-hide-modal-instructions .prompt-instructions {
+  display: none !important;
+}
+
+/* === Settings tab — tighter spacing === */
+.zen-settings .setting-item {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  border-top: none;
+}
+.zen-settings .setting-item-heading {
+  padding-top: 18px;
+  padding-bottom: 6px;
+  margin-top: 8px;
+  border-top: 1px solid var(--background-modifier-border);
+}
+.zen-settings .setting-item-heading:first-child {
+  margin-top: 0;
+  border-top: none;
+  padding-top: 0;
+}
+.zen-settings .setting-item-name {
+  font-size: var(--font-ui-small);
+}
+.zen-settings .setting-item-description {
+  font-size: var(--font-ui-smaller);
+  line-height: 1.3;
+}

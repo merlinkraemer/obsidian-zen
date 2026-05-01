@@ -1,0 +1,9 @@
+node_modules/
+main.js
+main.js.map
+.DS_Store
+data.json
+.pi/
+docs/
+dist/
+*.tsbuildinfo
