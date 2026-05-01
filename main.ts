@@ -281,11 +281,11 @@ const TOGGLES: ToggleDef[] = [
 ];
 
 const GROUP_ORDER: Group[] = [
-  "Sidebar layout",
-  "Sidebar header",
   "Window chrome",
-  "Editor",
+  "Sidebar header",
   "Search & modals",
+  "Editor",
+  "Sidebar layout",
 ];
 
 export default class ObsidianZenPlugin extends Plugin {

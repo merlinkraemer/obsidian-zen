@@ -1,9 +1,9 @@
 {
   "id": "obsidian-zen",
   "name": "Obsidian Zen",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "minAppVersion": "1.4.0",
-  "description": "Hide UI elements, reshape the sidebar, and apply minimal tweaks. Every tweak is a toggle.",
+  "description": "Obsidian plugin to hide all the clutter and clean up the UI. Toggleable.",
   "author": "Merlin Kraemer",
   "authorUrl": "https://github.com/merlinkraemer",
   "isDesktopOnly": true

@@ -1,59 +1,31 @@
 # Obsidian Zen
 
-A minimal-UI plugin for Obsidian. Hide whatever you don't need, reshape the sidebar, and add a few quality-of-life tweaks. Every change is a toggle in settings.
+Obsidian plugin to hide all the clutter and clean up the UI. Toggleable.
 
-> Personal plugin — not on the community plugin store. Install manually or via [BRAT](https://github.com/TfTHacker/obsidian42-brat).
+## Hides
 
-## Features
+- Root tab bar, status bar, vault name, scrollbars, tooltips
+- Sidebar tab header buttons (`+`, dropdown, sidebar toggle)
+- File explorer action bar
+- Search suggestions, match counts, modal instruction footers
+- Properties block in reading view
+- Current-line highlight
+- Tree indent guide lines
 
-**Sidebar layout**
-- Move the tab header to the bottom of the sidebar
-- Right-align tab header icons
-- Split tab header — tabs on top, action icons on the bottom
-- Roomy file explorer spacing
-- Hide tree indent guide lines
-- On startup, auto-detach all sidebar tabs except the ones you choose
+## Extras
 
-**Sidebar header buttons**
-- Daily-note button (opens today's note via the core Daily notes plugin)
-- Per-button visibility for Files tab, Search tab, `+`, dropdown, sidebar toggle, file-explorer action bar
-
-**Window chrome**
-- Hide root tab bar, status bar, vault name, scrollbars, tooltips
-
-**Editor**
-- Disable current-line highlight
-- Hide reading-view properties block
-- Scroll offset (typewriter scrolling) — keep the cursor a configurable distance from the edges
-
-**Search & modals**
-- Hide search suggestions, search match counts, modal instruction footers
-
-**Commands**
-- `Zenmode toggle` — fullscreen the app and collapse both sidebars (bind a hotkey)
+- Daily-note button in the sidebar tab header
+- Auto-detach unwanted sidebar tabs on startup
+- Sidebar tab header at bottom / right-aligned / split (tabs top, icons bottom)
+- Roomy sidebar spacing
+- Scroll offset (typewriter scrolling)
+- `Zenmode toggle` command — fullscreen + collapse both sidebars
 
 ## Install
 
-### Manual
+Manual: grab `main.js`, `manifest.json`, `styles.css` from the latest [release](../../releases/latest), drop into `<vault>/.obsidian/plugins/obsidian-zen/`.
 
-1. Download `main.js`, `manifest.json`, and `styles.css` from the latest [release](../../releases/latest).
-2. Drop them into `<your-vault>/.obsidian/plugins/obsidian-zen/`.
-3. Reload Obsidian and enable **Obsidian Zen** in *Settings → Community plugins*.
-
-### BRAT
-
-Add `merlinkraemer/obsidian-zen` as a beta plugin in BRAT.
-
-## Build from source
-
-```bash
-git clone https://github.com/merlinkraemer/obsidian-zen
-cd obsidian-zen
-npm install
-npm run build
-```
-
-`main.js` and `styles.css` will be written to the project root.
+BRAT: add `merlinkraemer/obsidian-zen`.
 
 ## License
 

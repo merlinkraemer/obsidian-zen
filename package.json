@@ -1,7 +1,7 @@
 {
   "name": "obsidian-zen",
-  "version": "1.0.0",
-  "description": "Hide UI elements and apply minimal theming tweaks for Obsidian.",
+  "version": "1.0.1",
+  "description": "Obsidian plugin to hide all the clutter and clean up the UI.",
   "main": "main.js",
   "scripts": {
     "dev": "node esbuild.config.mjs",
