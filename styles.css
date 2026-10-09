@@ -29,9 +29,10 @@ body.zen-tab-header-bottom
 /* === Window frame (macOS hidden title bar) ===
    No title bar is left to grab, so the empty part of each sidebar tab bar
    drags the window. Tabs and buttons inside it stay clickable. */
-body.is-hidden-frameless:not(.is-fullscreen)
+/* Obsidian marks the whole inner tab strip no-drag, which leaves nothing to grab. */
+body.is-hidden-frameless:not(.is-fullscreen):not(.is-grabbing)
   .workspace-split:not(.mod-root)
-  .workspace-tab-header-container {
+  :is(.workspace-tab-header-container, .workspace-tab-header-container-inner) {
   -webkit-app-region: drag;
 }
 body.is-hidden-frameless:not(.is-fullscreen)

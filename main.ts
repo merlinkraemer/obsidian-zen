@@ -33,6 +33,7 @@ interface ZenSettings {
   // Window chrome
   showRootTabBar: boolean;
   showRibbon: boolean;
+  showViewHeader: boolean;
   showTrafficLights: boolean;
   showStatusBar: boolean;
   showVaultName: boolean;
@@ -67,6 +68,7 @@ const DEFAULT_SETTINGS: ZenSettings = {
   showFileNavHeader: true,
   showRootTabBar: false,
   showRibbon: false,
+  showViewHeader: true,
   showTrafficLights: false,
   showStatusBar: false,
   showVaultName: false,
@@ -217,6 +219,12 @@ const TOGGLES: ToggleDef[] = [
     group: "Window",
   },
   {
+    key: "showViewHeader",
+    name: "Note title bar",
+    desc: "Bar above each note with its title. It's also where you drag the window; when off, drag by the empty part of a sidebar tab bar instead.",
+    group: "Window",
+  },
+  {
     key: "showTrafficLights",
     className: "zen-hide-traffic-lights",
     when: "off",
@@ -358,6 +366,7 @@ export default class ObsidianZenPlugin extends Plugin {
     }
     this.removeDailyNoteButtons();
     if (!this.settings.showRibbon) this.setVaultConfig("showRibbon", true);
+    if (!this.settings.showViewHeader) this.setVaultConfig("showViewHeader", true);
     setWindowButtons(window, true);
   }
 
@@ -406,9 +415,12 @@ export default class ObsidianZenPlugin extends Plugin {
   }
 
   applyAll() {
-    // Use Obsidian's own setting so the window frame spacing updates with it.
+    // Use Obsidian's own settings so the window frame and layout update with them.
     if (this.getVaultConfig("showRibbon") !== this.settings.showRibbon) {
       this.setVaultConfig("showRibbon", this.settings.showRibbon);
+    }
+    if (this.getVaultConfig("showViewHeader") !== this.settings.showViewHeader) {
+      this.setVaultConfig("showViewHeader", this.settings.showViewHeader);
     }
     setWindowButtons(window, this.settings.showTrafficLights);
     for (const t of TOGGLES) {
