@@ -26,6 +26,36 @@ body.zen-tab-header-bottom
   border-bottom: none;
 }
 
+/* === Window frame (macOS hidden title bar) ===
+   With the tab bar moved to the bottom, the top of each sidebar still needs
+   room for the traffic lights and a strip to drag the window by. */
+body.is-hidden-frameless:not(.is-fullscreen).zen-tab-header-bottom
+  .workspace-tabs.mod-top-left-space,
+body.is-hidden-frameless:not(.is-fullscreen).zen-tab-header-bottom
+  .workspace-tabs.mod-top-right-space {
+  position: relative;
+  padding-top: var(--header-height);
+}
+body.is-hidden-frameless:not(.is-fullscreen).zen-tab-header-bottom
+  .workspace-tabs.mod-top-left-space::before,
+body.is-hidden-frameless:not(.is-fullscreen).zen-tab-header-bottom
+  .workspace-tabs.mod-top-right-space::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--header-height);
+  -webkit-app-region: drag;
+}
+/* The bottom bar no longer sits next to the traffic lights. */
+body.is-hidden-frameless:not(.is-fullscreen).zen-tab-header-bottom
+  .workspace-tabs.mod-top-left-space
+  > .workspace-tab-header-container {
+  padding-left: var(--size-4-2);
+  -webkit-app-region: no-drag;
+}
+
 /* === Split tab header — tabs at top, action icons pinned to bottom ===
    When this is on, override `tab-header-bottom` so layout doesn't fight us. */
 body.zen-split-tab-header .workspace-tabs.mod-top-left-space,
@@ -207,6 +237,17 @@ body.zen-hide-root-tabs .mod-root .workspace-tabs .workspace-tab-header-containe
    so the title text doesn't slide under the traffic lights. */
 body.zen-hide-root-tabs .mod-top-left-space .view-header {
   padding-left: var(--frame-left-space);
+}
+/* Without the root tab bar there's no title bar to drag the window by:
+   let the empty part of the note header act as one. */
+body.zen-hide-root-tabs.is-hidden-frameless .mod-root .view-header {
+  -webkit-app-region: drag;
+}
+body.zen-hide-root-tabs.is-hidden-frameless .mod-root .view-header-left,
+body.zen-hide-root-tabs.is-hidden-frameless .mod-root .view-header-title,
+body.zen-hide-root-tabs.is-hidden-frameless .mod-root .view-header-breadcrumb,
+body.zen-hide-root-tabs.is-hidden-frameless .mod-root .view-actions {
+  -webkit-app-region: no-drag;
 }
 body.zen-hide-status-bar .status-bar {
   display: none !important;
