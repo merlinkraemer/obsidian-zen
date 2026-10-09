@@ -1,6 +1,6 @@
 # obsidian-zen — state
 
-_Updated: 2026-10-09 13:12 by orchestrator. Live state only, max ~80 lines. History → docs/journal.md._
+_Updated: 2026-10-09 13:21 by orchestrator. Live state only, max ~80 lines. History → docs/journal.md._
 
 ## Direction
 Not in Compass (~/dev/brief/baseline.md missing on lab2). Maintenance mode: plugin is shipped; keep it healthy, answer contributors, cut releases when Merlin says.
@@ -12,11 +12,11 @@ Zen UI is live in the Obsidian community store (1.1.4, GitHub release with main.
 AGENTS.md ## Unattended. Pushing a tag = public release; always gated.
 
 ## Waiting on Merlin
-1. PR #1 + fixes (scrollbar, drop target, setting text) — installed in vault for Merlin's manual test; 1.1.4 backup ~/zen-ui-1.1.4-backup on Mac — rec: merge if test passes — branch: pr1-fixes (worktree /tmp/claude-1000/zen-pr1, local only)
+1. Settings tabs (Q4) — rec: test the worktree build in Obsidian — branch: feat/settings-tabs
 
 ## Queue
 
-### Q1 Review PR #1 drag-file-tree [landed] [box]
+### Q1 Review + fix PR #1 drag-file-tree [landed] [box]
 goal: verdict on merlinkraemer/obsidian-zen#1
 acceptance: build result, problems with file:line, draft review comment
 validation: npm run build on the PR head
@@ -34,5 +34,11 @@ acceptance: matches release.yml and how 1.1.0–1.1.4 were cut (git log)
 validation: none (docs)
 do not touch: code, versions
 
+### Q4 Settings tabs [running] [box]
+goal: split the long settings pane into tabs for the next release
+acceptance: all settings reachable, no behavior change, native look, build green
+validation: npm ci && npm run build; manual look by Merlin
+do not touch: setting keys/defaults, release files
+
 ## Rundown
-Init done. Moved to lab2, build green, store listing and release 1.1.4 verified. PR #1 fixed on pr1-fixes, test build installed in Obsidian; waiting on Merlin's test.
+PR #1 fixed, tested by Merlin, squash-merged. 1.1.5 released (GitHub release + 3 assets). Q4 settings tabs running.
