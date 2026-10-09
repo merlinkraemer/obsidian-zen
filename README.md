@@ -1,27 +1,28 @@
-# zen-ui
+# Zen UI
 
-adds toggles in settings to hide lots of chrome. Make it as minimal as you want
+Less clutter, more Zen. Make Obsidian as minimal as you want.
 
-also:
-- sync tab: git status + pull / push / sync buttons in the sidebar. needs the [Git](https://github.com/Vinzent03/obsidian-git) plugin, which does the actual pulling and pushing
-- daily note button in the sidebar tab bar
-- edit default sidebar tabs
-- more file-explorer spacing
-- scroll offset
-- `zenmode toggle` - enter zenmode to fullscreen + hide sidebars etc
+## Features
 
-## install
+- **Less chrome** — hide sidebars, toolbars, padding, and other distractions with simple toggles in settings
+- **Git sync** — check status, pull, push, and sync from a dedicated sidebar tab (requires [Git](https://github.com/Vinzent03/obsidian-git))
+- **Daily notes** — open today's note right from the sidebar
+- **Sidebar tabs** — customize the default tabs
+- **More breathing room** — adjust file-explorer spacing and scroll offset
+- **Zen mode** — run `zenmode toggle` to go fullscreen and hide everything but what matters
 
-Community plugins: search for **Zen UI**.
+## Install
 
-Manual: grab `main.js`, `manifest.json`, `styles.css` from the latest [release](../../releases/latest), drop into `<vault>/.obsidian/plugins/zen-ui/`.
+**Community plugins:** Search for **Zen UI** in Obsidian.
 
-BRAT: add `merlinkraemer/obsidian-zen`.
+**Manual:** Download `main.js`, `manifest.json`, and `styles.css` from the latest [release](https://github.com/merlinkraemer/obsidian-zen/releases/latest) and place them in `<vault>/.obsidian/plugins/zen-ui/`.
 
-## disclosures
+**BRAT:** Add `merlinkraemer/obsidian-zen`.
 
-- the sync tab reads status, branch and last commit through the Git plugin. zen-ui never runs git or shell commands itself, and makes no network requests
-- pull / push / commit / fetch all go through the Git plugin
+## Disclosures
+
+- The sync tab reads status, branch, and the last commit through the Git plugin. Zen UI never runs Git or shell commands itself and makes no network requests.
+- Pull, push, commit, and fetch are handled by the Git plugin. Zen UI never writes to your repository directly.
 
 ## License
 
