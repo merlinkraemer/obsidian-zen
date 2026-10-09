@@ -4,6 +4,8 @@ main.js.map
 .DS_Store
 data.json
 .pi/
-docs/
+docs/*
+!docs/STATE.md
+!docs/journal.md
 dist/
 *.tsbuildinfo
