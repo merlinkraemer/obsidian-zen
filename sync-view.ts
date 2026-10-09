@@ -1,17 +1,24 @@
-import { FileSystemAdapter, ItemView, Notice, WorkspaceLeaf, setIcon } from "obsidian";
-import { execFile } from "child_process";
+import { ItemView, Notice, WorkspaceLeaf, setIcon } from "obsidian";
 
 export const SYNC_VIEW_TYPE = "zen-sync";
 
 const GIT_PLUGIN_ID = "obsidian-git";
-// Obsidian launched from the Dock doesn't inherit the shell PATH.
-const GIT_PATH = ["/opt/homebrew/bin", "/usr/local/bin", "/usr/bin", process.env.PATH].join(":");
+
+/** The parts of the Git plugin's git manager this view reads. All git work happens in the Git plugin. */
+type GitManager = {
+  status: () => Promise<{ all: { vaultPath: string; index: string; workingDir: string }[] }>;
+  branchInfo: () => Promise<{ current?: string; tracking?: string }>;
+  log: (file: undefined, relativeToVault: boolean, limit: number) => Promise<{ message: string; date?: string }[]>;
+  fetch: () => Promise<void>;
+  /** simple-git instance on desktop; used only for ahead/behind counts. */
+  git?: { raw?: (args: string[]) => Promise<string> };
+};
 
 type SyncStatus = {
   branch: string;
   upstream: string | null;
-  ahead: number;
-  behind: number;
+  ahead: number | null;
+  behind: number | null;
   changes: { code: string; path: string }[];
   lastCommit: string;
   lastCommitAgo: string;
@@ -52,30 +59,42 @@ export class SyncView extends ItemView {
     await this.refresh(true);
   }
 
-  private git(args: string[]): Promise<string> {
-    const adapter = this.app.vault.adapter;
-    if (!(adapter instanceof FileSystemAdapter)) return Promise.reject(new Error("Vault is not on the local file system."));
-    const cwd = adapter.getBasePath();
-    return new Promise((resolve, reject) => {
-      execFile("git", ["-c", "core.quotePath=false", ...args], { cwd, env: { ...process.env, PATH: GIT_PATH } }, (err: Error | null, stdout: string, stderr: string) =>
-        err ? reject(new Error(stderr.trim() || err.message)) : resolve(stdout)
-      );
-    });
+  private gitManager(): GitManager {
+    const app = this.app as unknown as {
+      plugins: { enabledPlugins: Set<string>; plugins: Record<string, { gitManager?: GitManager }> };
+    };
+    const manager = app.plugins.enabledPlugins.has(GIT_PLUGIN_ID)
+      ? app.plugins.plugins[GIT_PLUGIN_ID]?.gitManager
+      : undefined;
+    if (!manager) throw new Error("Enable the Git community plugin to see sync status.");
+    return manager;
   }
 
   async refresh(fetch = false) {
     try {
+      const git = this.gitManager();
       if (fetch) {
         this.busy = "Fetching…";
         this.render();
-        await this.git(["fetch", "--quiet"]);
+        await git.fetch();
         this.lastFetch = new Date();
       }
-      const [status, log] = await Promise.all([
-        this.git(["status", "--porcelain=v1", "-b"]),
-        this.git(["log", "-1", "--format=%cr%x00%s"]),
-      ]);
-      this.status = parseStatus(status, log);
+      const [status, branch, log] = await Promise.all([git.status(), git.branchInfo(), git.log(undefined, false, 1)]);
+      let ahead: number | null = null;
+      let behind: number | null = null;
+      if (branch.tracking && git.git?.raw) {
+        const counts = await git.git.raw(["rev-list", "--left-right", "--count", `HEAD...${branch.tracking}`]);
+        [ahead, behind] = counts.trim().split(/\s+/).map(Number);
+      }
+      this.status = {
+        branch: branch.current ?? "?",
+        upstream: branch.tracking ?? null,
+        ahead,
+        behind,
+        changes: status.all.map((f) => ({ code: (f.index + f.workingDir).trim(), path: f.vaultPath })),
+        lastCommit: log[0]?.message ?? "",
+        lastCommitAgo: log[0]?.date ? timeAgo(new Date(log[0].date)) : "",
+      };
       this.error = null;
     } catch (e) {
       this.error = (e as Error).message;
@@ -185,19 +204,18 @@ export class SyncView extends ItemView {
   }
 }
 
-function parseStatus(status: string, log: string): SyncStatus {
-  const [head, ...lines] = status.split("\n").filter(Boolean);
-  // e.g. "## main...origin/main [ahead 1, behind 2]"
-  const m = head.match(/^## (.+?)(?:\.\.\.(\S+))?(?: \[(.*)\])?$/);
-  const tracking = m?.[3] ?? "";
-  const [ago, ...msg] = log.trim().split("\0");
-  return {
-    branch: m?.[1] ?? "?",
-    upstream: m?.[2] ?? null,
-    ahead: Number(tracking.match(/ahead (\d+)/)?.[1] ?? 0),
-    behind: Number(tracking.match(/behind (\d+)/)?.[1] ?? 0),
-    changes: lines.map((l) => ({ code: l.slice(0, 2).trim(), path: l.slice(3).replace(/^"|"$/g, "") })),
-    lastCommit: msg.join(" "),
-    lastCommitAgo: ago,
-  };
+function timeAgo(date: Date): string {
+  const seconds = (date.getTime() - Date.now()) / 1000;
+  const units: [Intl.RelativeTimeFormatUnit, number][] = [
+    ["year", 31536000],
+    ["month", 2592000],
+    ["day", 86400],
+    ["hour", 3600],
+    ["minute", 60],
+  ];
+  const rtf = new Intl.RelativeTimeFormat(undefined, { numeric: "auto" });
+  for (const [unit, size] of units) {
+    if (Math.abs(seconds) >= size) return rtf.format(Math.round(seconds / size), unit);
+  }
+  return rtf.format(0, "minute");
 }

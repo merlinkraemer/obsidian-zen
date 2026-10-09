@@ -5,6 +5,8 @@ import {
   Plugin,
   PluginSettingTab,
   Setting,
+  SettingDefinitionItem,
+  requireApiVersion,
   WorkspaceLeaf,
   WorkspaceSplit,
   setIcon,
@@ -324,7 +326,7 @@ const GROUP_ORDER: Group[] = [
 ];
 
 export default class ObsidianZenPlugin extends Plugin {
-  settings!: ZenSettings;
+  declare settings: ZenSettings;
 
   async onload() {
     await this.loadSettings();
@@ -597,83 +599,127 @@ function buildScrollOffsetExtension(plugin: ObsidianZenPlugin) {
   );
 }
 
+type SettingRow = {
+  name: string;
+  desc: string;
+  render: (setting: Setting) => void;
+  visible?: () => boolean;
+};
+
 class ZenSettingTab extends PluginSettingTab {
   plugin: ObsidianZenPlugin;
 
   constructor(app: App, plugin: ObsidianZenPlugin) {
     super(app, plugin);
     this.plugin = plugin;
+    this.containerEl.addClass("zen-settings");
   }
 
+  /** Obsidian 1.13+: rendered declaratively and indexed for settings search. */
+  getSettingDefinitions(): SettingDefinitionItem[] {
+    return this.groups().map(({ heading, rows }) => ({
+      type: "group" as const,
+      heading,
+      items: rows.map((r) => ({
+        name: r.name,
+        desc: r.desc,
+        visible: r.visible,
+        render: (setting: Setting) => {
+          setting.setName(r.name).setDesc(r.desc);
+          r.render(setting);
+        },
+      })),
+    }));
+  }
+
+  /** Fallback for Obsidian older than 1.13, which doesn't call getSettingDefinitions(). */
   display(): void {
     const { containerEl } = this;
-    const s = this.plugin.settings;
-    const save = async (redraw = false) => {
-      await this.plugin.saveSettings();
-      if (redraw) this.display();
-    };
     containerEl.empty();
-    containerEl.addClass("zen-settings");
-    containerEl.createEl("p", {
-      cls: "zen-settings-intro",
-      text: "Toggles show or enable each element. Turn one off to hide it.",
-    });
+    for (const { heading, rows } of this.groups()) {
+      new Setting(containerEl).setName(heading).setHeading();
+      for (const r of rows) {
+        if (r.visible && !r.visible()) continue;
+        r.render(new Setting(containerEl).setName(r.name).setDesc(r.desc));
+      }
+    }
+  }
 
-    for (const group of GROUP_ORDER) {
-      new Setting(containerEl).setName(group).setHeading();
+  private rerender() {
+    if (requireApiVersion("1.13.0")) this.update();
+    else this.display();
+  }
+
+  private groups(): { heading: string; rows: SettingRow[] }[] {
+    const s = this.plugin.settings;
+    const save = () => this.plugin.saveSettings();
+
+    return GROUP_ORDER.map((group) => {
+      const rows: SettingRow[] = [];
 
       if (group === "Sidebar layout") {
-        new Setting(containerEl)
-          .setName("Tab bar position")
-          .setDesc("Where the sidebar tabs and buttons sit. Split keeps tabs on top and buttons at the bottom.")
-          .addDropdown((d) =>
-            d
-              .addOptions({ top: "Top", bottom: "Bottom", split: "Split" })
-              .setValue(s.splitTabHeader ? "split" : s.tabHeaderBottom ? "bottom" : "top")
-              .onChange(async (v) => {
-                s.tabHeaderBottom = v === "bottom";
-                s.splitTabHeader = v === "split";
-                await save();
-              })
-          );
+        rows.push({
+          name: "Tab bar position",
+          desc: "Where the sidebar tabs and buttons sit. Split keeps tabs on top and buttons at the bottom.",
+          render: (setting) =>
+            setting.addDropdown((d) =>
+              d
+                .addOptions({ top: "Top", bottom: "Bottom", split: "Split" })
+                .setValue(s.splitTabHeader ? "split" : s.tabHeaderBottom ? "bottom" : "top")
+                .onChange(async (v) => {
+                  s.tabHeaderBottom = v === "bottom";
+                  s.splitTabHeader = v === "split";
+                  await save();
+                })
+            ),
+        });
       }
 
       for (const t of TOGGLES.filter((x) => x.group === group && !x.custom)) {
-        new Setting(containerEl)
-          .setName(t.name)
-          .setDesc(t.desc)
-          .addToggle((tg) =>
-            tg.setValue(s[t.key] as boolean).onChange(async (v) => {
-              (s[t.key] as boolean) = v;
-              await save(t.key === "scrollOffsetEnabled");
-            })
-          );
+        rows.push({
+          name: t.name,
+          desc: t.desc,
+          render: (setting) =>
+            setting.addToggle((tg) =>
+              tg.setValue(s[t.key] as boolean).onChange(async (v) => {
+                (s[t.key] as boolean) = v;
+                await save();
+                if (t.key === "scrollOffsetEnabled") this.rerender();
+              })
+            ),
+        });
       }
 
-      if (group === "Editor" && s.scrollOffsetEnabled) {
-        new Setting(containerEl)
-          .setName("Typewriter distance")
-          .setDesc("Distance kept above and below the cursor; use 0 to turn it off.")
-          .setClass("zen-setting-sub")
-          .addText((t) =>
-            t
-              .setPlaceholder("25")
-              .setValue(s.scrollOffsetValue)
-              .onChange(async (v) => {
-                s.scrollOffsetValue = v;
-                await save();
-              })
-          )
-          .addDropdown((d) =>
-            d
-              .addOptions({ percent: "% of editor", px: "px" })
-              .setValue(s.scrollOffsetPercentage ? "percent" : "px")
-              .onChange(async (v) => {
-                s.scrollOffsetPercentage = v === "percent";
-                await save();
-              })
-          );
+      if (group === "Editor") {
+        rows.push({
+          name: "Typewriter distance",
+          desc: "Distance kept above and below the cursor; use 0 to turn it off.",
+          visible: () => s.scrollOffsetEnabled,
+          render: (setting) =>
+            setting
+              .setClass("zen-setting-sub")
+              .addText((t) =>
+                t
+                  .setPlaceholder("25")
+                  .setValue(s.scrollOffsetValue)
+                  .onChange(async (v) => {
+                    s.scrollOffsetValue = v;
+                    await save();
+                  })
+              )
+              .addDropdown((d) =>
+                d
+                  .addOptions({ percent: "% of editor", px: "px" })
+                  .setValue(s.scrollOffsetPercentage ? "percent" : "px")
+                  .onChange(async (v) => {
+                    s.scrollOffsetPercentage = v === "percent";
+                    await save();
+                  })
+              ),
+        });
       }
-    }
+
+      return { heading: group, rows };
+    });
   }
 }
