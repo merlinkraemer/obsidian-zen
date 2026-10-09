@@ -101,61 +101,83 @@ export class SyncView extends ItemView {
     const el = this.contentEl;
     el.empty();
 
-    const actions = el.createDiv({ cls: "zen-sync-actions" });
-    const button = (icon: string, text: string, onClick: () => void, cta = false) => {
-      const b = actions.createEl("button", { cls: cta ? "mod-cta" : "" });
-      setIcon(b.createSpan({ cls: "zen-sync-btn-icon" }), icon);
-      b.createSpan({ text });
-      b.disabled = this.busy !== null;
-      b.addEventListener("click", onClick);
-    };
-    button("refresh-cw", "Sync now", () => this.runGitCommand("push", "Syncing…"), true);
-    button("arrow-down", "Pull", () => this.runGitCommand("pull", "Pulling…"));
-    button("arrow-up", "Push", () => this.runGitCommand("push2", "Pushing…"));
-    button("rotate-ccw", "Check", () => void this.refresh(true));
+    const body = el.createDiv({ cls: "zen-sync-body" });
+    const s = this.status;
 
-    if (this.busy) el.createDiv({ cls: "zen-sync-busy", text: this.busy });
+    let icon = "check-circle-2";
+    let title = "In sync";
+    let tone = "is-ok";
     if (this.error) {
-      el.createDiv({ cls: "zen-sync-error", text: this.error });
+      icon = "alert-circle";
+      title = "Git error";
+      tone = "is-error";
+    } else if (this.busy) {
+      icon = "loader";
+      title = this.busy;
+      tone = "is-busy";
+    } else if (!s) {
+      icon = "loader";
+      title = "Loading…";
+      tone = "is-busy";
+    } else if (!s.upstream) {
+      icon = "alert-circle";
+      title = "No remote branch";
+      tone = "is-warn";
+    } else if (s.changes.length || s.ahead || s.behind) {
+      icon = s.behind ? "arrow-down-circle" : "arrow-up-circle";
+      title = [
+        s.changes.length && `${s.changes.length} changed`,
+        s.ahead && `${s.ahead} to push`,
+        s.behind && `${s.behind} to pull`,
+      ]
+        .filter(Boolean)
+        .join(" · ");
+      tone = "is-warn";
+    }
+
+    const head = body.createDiv({ cls: `zen-sync-state ${tone}` });
+    setIcon(head.createSpan({ cls: "zen-sync-state-icon" }), icon);
+    head.createSpan({ cls: "zen-sync-state-title", text: title });
+
+    if (this.error) {
+      body.createDiv({ cls: "zen-sync-error", text: this.error });
       return;
     }
-    const s = this.status;
     if (!s) return;
 
-    const summary = el.createDiv({ cls: "zen-sync-summary" });
-    const row = (label: string, value: string, cls = "") => {
-      const r = summary.createDiv({ cls: "zen-sync-row" });
-      r.createSpan({ cls: "zen-sync-label", text: label });
-      r.createSpan({ cls: `zen-sync-value ${cls}`, text: value });
+    const meta = [s.upstream ? `${s.branch} → ${s.upstream}` : s.branch];
+    if (this.lastFetch) meta.push(`checked ${this.lastFetch.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}`);
+    body.createDiv({ cls: "zen-sync-meta", text: meta.join(" · ") });
+
+    const actions = body.createDiv({ cls: "zen-sync-actions" });
+    const action = (icon: string, label: string, onClick: () => void) => {
+      const row = actions.createDiv({ cls: "zen-sync-action" });
+      setIcon(row.createSpan({ cls: "zen-sync-action-icon" }), icon);
+      row.createSpan({ text: label });
+      if (this.busy) row.addClass("is-disabled");
+      else row.addEventListener("click", onClick);
+    };
+    action("refresh-cw", "Sync now", () => this.runGitCommand("push", "Syncing…"));
+    action("arrow-down-to-line", "Pull", () => this.runGitCommand("pull", "Pulling…"));
+    action("arrow-up-from-line", "Push", () => this.runGitCommand("push2", "Pushing…"));
+    action("radar", "Check remote", () => void this.refresh(true));
+
+    const section = (label: string) => {
+      const sec = body.createDiv({ cls: "zen-sync-section" });
+      sec.createDiv({ cls: "zen-sync-heading", text: label });
+      return sec;
     };
 
-    let state = "In sync";
-    let stateCls = "is-ok";
-    if (!s.upstream) {
-      state = "No remote branch";
-      stateCls = "is-warn";
-    } else if (s.ahead || s.behind) {
-      state = [s.ahead && `${s.ahead} to push`, s.behind && `${s.behind} to pull`]
-        .filter(Boolean)
-        .join(", ");
-      stateCls = "is-warn";
-    }
-    if (s.changes.length) {
-      state = `${s.changes.length} uncommitted` + (stateCls === "is-ok" ? "" : `, ${state}`);
-      stateCls = "is-warn";
-    }
-    row("Status", state, stateCls);
-    row("Branch", s.upstream ? `${s.branch} → ${s.upstream}` : s.branch);
-    row("Last commit", `${s.lastCommitAgo} · ${s.lastCommit}`);
-    if (this.lastFetch) row("Checked", this.lastFetch.toLocaleTimeString());
+    const last = section("Last commit");
+    last.createDiv({ cls: "zen-sync-commit", text: s.lastCommit, attr: { title: s.lastCommit } });
+    last.createDiv({ cls: "zen-sync-meta", text: s.lastCommitAgo });
 
     if (s.changes.length) {
-      el.createDiv({ cls: "zen-sync-heading", text: "Changes" });
-      const list = el.createDiv({ cls: "zen-sync-changes" });
+      const list = section(`Changes · ${s.changes.length}`);
       for (const c of s.changes) {
         const item = list.createDiv({ cls: "zen-sync-change", attr: { title: c.path } });
         item.createSpan({ cls: "zen-sync-code", text: c.code });
-        item.createSpan({ cls: "zen-sync-path", text: c.path });
+        item.createSpan({ cls: "zen-sync-path", text: c.path.split("/").pop() ?? c.path });
       }
     }
   }

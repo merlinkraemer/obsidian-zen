@@ -263,86 +263,118 @@ body.zen-hide-modal-instructions .prompt-instructions {
 
 /* === Sync tab === */
 .zen-sync {
+  padding: 0 !important;
+}
+.zen-sync-body {
   display: flex;
   flex-direction: column;
-  gap: var(--size-4-3);
-  padding: var(--size-4-3);
+  gap: var(--size-4-1);
+  padding: var(--size-4-3) var(--size-4-4);
+  font-size: var(--font-ui-small);
 }
-.zen-sync-actions {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--size-4-2);
-}
-.zen-sync-actions button {
+.zen-sync-state {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: var(--size-4-1);
+  gap: var(--size-4-2);
+  font-size: var(--font-ui-medium);
+  font-weight: var(--font-medium);
+  color: var(--text-normal);
 }
-.zen-sync-actions button:first-child {
-  grid-column: span 2;
-}
-.zen-sync-btn-icon {
+.zen-sync-state-icon {
   display: flex;
+  color: var(--text-faint);
 }
-.zen-sync-btn-icon svg {
+.zen-sync-state-icon svg {
   width: var(--icon-s);
   height: var(--icon-s);
 }
-.zen-sync-busy {
-  color: var(--text-muted);
-  font-size: var(--font-ui-small);
+.zen-sync-state.is-ok .zen-sync-state-icon {
+  color: var(--color-green);
+}
+.zen-sync-state.is-warn .zen-sync-state-icon {
+  color: var(--color-yellow);
+}
+.zen-sync-state.is-error .zen-sync-state-icon {
+  color: var(--text-error);
+}
+.zen-sync-state.is-busy .zen-sync-state-icon svg {
+  animation: zen-spin 1s linear infinite;
+}
+@keyframes zen-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.zen-sync-actions {
+  display: flex;
+  flex-direction: column;
+  margin: var(--size-4-3) calc(-1 * var(--size-4-2)) 0;
+}
+.zen-sync-action {
+  display: flex;
+  align-items: center;
+  gap: var(--size-4-2);
+  padding: var(--size-4-2);
+  border-radius: var(--radius-m);
+  color: var(--nav-item-color);
+  font-size: var(--nav-item-size);
+  cursor: var(--cursor);
+}
+.zen-sync-action:hover {
+  background: var(--nav-item-background-hover);
+  color: var(--nav-item-color-hover);
+}
+.zen-sync-action.is-disabled {
+  opacity: 0.4;
+  pointer-events: none;
+}
+.zen-sync-action-icon {
+  display: flex;
+  color: var(--icon-color);
+}
+.zen-sync-action-icon svg {
+  width: var(--icon-s);
+  height: var(--icon-s);
+}
+.zen-sync-meta {
+  color: var(--text-faint);
+  font-size: var(--font-ui-smaller);
 }
 .zen-sync-error {
   color: var(--text-error);
-  font-size: var(--font-ui-small);
+  font-size: var(--font-ui-smaller);
   white-space: pre-wrap;
 }
-.zen-sync-summary {
-  display: flex;
-  flex-direction: column;
-  gap: var(--size-4-1);
-  font-size: var(--font-ui-small);
-}
-.zen-sync-row {
-  display: flex;
-  gap: var(--size-4-2);
-}
-.zen-sync-label {
-  flex: 0 0 5.5em;
-  color: var(--text-muted);
-}
-.zen-sync-value {
-  min-width: 0;
-  overflow-wrap: anywhere;
-}
-.zen-sync-value.is-ok {
-  color: var(--text-success);
-}
-.zen-sync-value.is-warn {
-  color: var(--text-warning);
-}
-.zen-sync-heading {
-  color: var(--text-muted);
-  font-size: var(--font-ui-smaller);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-.zen-sync-changes {
+.zen-sync-section {
   display: flex;
   flex-direction: column;
   gap: 2px;
-  font-size: var(--font-ui-small);
+  margin-top: var(--size-4-4);
+}
+.zen-sync-heading {
+  color: var(--text-faint);
+  font-size: var(--font-ui-smaller);
+  font-weight: var(--font-medium);
+  margin-bottom: var(--size-4-1);
+}
+.zen-sync-commit {
+  color: var(--text-muted);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 .zen-sync-change {
   display: flex;
   gap: var(--size-4-2);
+  color: var(--text-muted);
   white-space: nowrap;
 }
 .zen-sync-code {
-  flex: 0 0 1.5em;
+  flex: 0 0 1.2em;
   color: var(--text-faint);
   font-family: var(--font-monospace);
+  font-size: var(--font-ui-smaller);
 }
 .zen-sync-path {
   overflow: hidden;
