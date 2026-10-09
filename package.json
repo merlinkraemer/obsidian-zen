@@ -1,6 +1,6 @@
 {
   "name": "zen-ui",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Hide interface clutter, tidy the sidebar, and add a git sync tab. Every tweak is a toggle.",
   "main": "main.js",
   "scripts": {
