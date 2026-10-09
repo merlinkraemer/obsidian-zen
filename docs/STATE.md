@@ -12,11 +12,11 @@ Zen UI is live in the Obsidian community store (1.1.4, GitHub release with main.
 AGENTS.md ## Unattended. Pushing a tag = public release; always gated.
 
 ## Waiting on Merlin
-1. PR #1 (drag window from file tree, off by default) — rec: pending review — branch: feat/drag-file-tree (contributor fork)
+1. PR #1 (drag window from file tree, off by default) — rec: request changes (describe right-click loss in the setting text; no-drag on the scrollbar; check drop onto empty space) — branch: feat/drag-file-tree (contributor fork). Build green, CSS not tested in Obsidian.
 
 ## Queue
 
-### Q1 Review PR #1 drag-file-tree [running] [box]
+### Q1 Review PR #1 drag-file-tree [landed] [box]
 goal: verdict on merlinkraemer/obsidian-zen#1
 acceptance: build result, problems with file:line, draft review comment
 validation: npm run build on the PR head
@@ -35,4 +35,4 @@ validation: none (docs)
 do not touch: code, versions
 
 ## Rundown
-Init done. Moved to lab2, build green, store listing and release 1.1.4 verified. PR #1 review running.
+Init done. Moved to lab2, build green, store listing and release 1.1.4 verified. PR #1 reviewed: merge after 2 small changes; your call to post.
