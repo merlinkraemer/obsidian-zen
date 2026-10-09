@@ -20,8 +20,8 @@ BRAT: add `merlinkraemer/obsidian-zen`.
 
 ## disclosures
 
-- the sync tab runs your local `git` in the vault folder (`status`, `log`, and `fetch` when you hit Check remote). `fetch` talks to your configured git remote, nothing else leaves your machine
-- pull / push / commit go through the Git plugin, zen-ui never writes to your repo itself
+- the sync tab reads status, branch and last commit through the Git plugin. zen-ui never runs git or shell commands itself, and makes no network requests
+- pull / push / commit / fetch all go through the Git plugin
 
 ## License
 

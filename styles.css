@@ -42,8 +42,9 @@ body.is-hidden-frameless:not(.is-fullscreen)
   -webkit-app-region: no-drag;
 }
 /* Window buttons hidden: reclaim the space Obsidian reserves for them. */
-body.zen-hide-traffic-lights {
-  --frame-left-space: 0px !important;
+/* Beats Obsidian's `.mod-macos` / `.mod-macos.mod-system-rtl` rules. */
+body.mod-macos.zen-hide-traffic-lights {
+  --frame-left-space: 0px;
 }
 body.zen-hide-traffic-lights .workspace-ribbon.mod-left {
   margin-top: 0;
@@ -59,8 +60,8 @@ body.is-hidden-frameless:not(.is-fullscreen).zen-tab-header-bottom
    When this is on, override `tab-header-bottom` so layout doesn't fight us. */
 body.zen-split-tab-header .workspace-tabs.mod-top-left-space,
 body.zen-split-tab-header .workspace-tabs.mod-top-right-space {
-  position: relative !important;
-  flex-direction: column !important;
+  position: relative;
+  flex-direction: column;
 }
 body.zen-split-tab-header
   .workspace-tabs.mod-top-left-space
@@ -68,8 +69,8 @@ body.zen-split-tab-header
 body.zen-split-tab-header
   .workspace-tabs.mod-top-right-space
   > .workspace-tab-container {
-  order: 2 !important;
-  padding-bottom: 40px !important;
+  order: 2;
+  padding-bottom: 40px;
 }
 body.zen-split-tab-header
   .workspace-tabs.mod-top-left-space
@@ -77,8 +78,8 @@ body.zen-split-tab-header
 body.zen-split-tab-header
   .workspace-tabs.mod-top-right-space
   > .workspace-tab-header-container {
-  order: 1 !important;
-  position: static !important;
+  order: 1;
+  position: static;
   border-bottom: var(--tab-outline-width) solid var(--tab-outline-color);
   border-top: none;
 }
@@ -109,24 +110,24 @@ body.zen-split-tab-header
 body.zen-split-tab-header
   .workspace-tabs.mod-top-right-space
   .zen-daily-note-button {
-  position: absolute !important;
-  bottom: 6px !important;
+  position: absolute;
+  bottom: 6px;
   z-index: 10;
 }
 
 body.zen-split-tab-header .workspace-tabs .sidebar-toggle-button {
-  right: 4px !important;
+  right: 4px;
 }
 body.zen-split-tab-header .workspace-tabs .workspace-tab-header-tab-list {
-  right: 36px !important;
+  right: 36px;
 }
 body.zen-split-tab-header
   .workspace-tabs
   .workspace-tab-header-new-tab:not(.zen-daily-note-button) {
-  right: 68px !important;
+  right: 68px;
 }
 body.zen-split-tab-header .workspace-tabs .zen-daily-note-button {
-  right: 100px !important;
+  right: 100px;
 }
 
 /* === Right-align icons in tab header === */
@@ -161,11 +162,11 @@ body.zen-roomy-sidebar
 body.zen-roomy-sidebar
   .workspace-leaf-content[data-type="file-explorer"]
   .tree-item-self {
-  min-height: var(--size-4-8) !important;
-  display: flex !important;
-  align-items: center !important;
-  padding-top: 0 !important;
-  padding-bottom: 0 !important;
+  min-height: var(--size-4-8);
+  display: flex;
+  align-items: center;
+  padding-top: 0;
+  padding-bottom: 0;
 }
 
 body.zen-roomy-sidebar
@@ -181,25 +182,25 @@ body.zen-roomy-sidebar
 body.zen-hide-tree-lines
   .workspace-leaf-content[data-type="file-explorer"]
   .tree-item-children {
-  border-inline-start: none !important;
-  background-image: none !important;
+  border-inline-start: none;
+  background-image: none;
 }
 body.zen-hide-tree-lines
   .workspace-leaf-content[data-type="file-explorer"]
   .nav-folder-children {
-  border-inline-start: none !important;
+  border-inline-start: none;
 }
 
 /* === Sidebar tab header icons === */
 body.zen-hide-new-tab .workspace-tab-header-new-tab {
-  display: none !important;
+  display: none;
 }
 body.zen-hide-tab-list .workspace-tab-header-tab-list {
-  display: none !important;
+  display: none;
 }
 body.zen-hide-sidebar-toggle .sidebar-toggle-button.mod-right,
 body.zen-hide-sidebar-toggle .sidebar-toggle-button.mod-left {
-  display: none !important;
+  display: none;
 }
 /* macOS frameless: when sidebar toggles are hidden, reserve space for the
    traffic lights on the left and trim the right tab-header padding. */
@@ -217,20 +218,20 @@ body.zen-hide-sidebar-toggle.mod-macos.is-hidden-frameless:not(.is-popout-window
 body.zen-hide-file-nav-header
   .workspace-leaf-content[data-type="file-explorer"]
   .nav-header {
-  display: none !important;
+  display: none;
 }
 
 /* === Editor === */
-body.zen-no-line-highlight .cm-active {
-  background-color: transparent !important;
+body.zen-no-line-highlight .markdown-source-view.mod-cm6 .cm-line.cm-active {
+  background-color: transparent;
 }
 body.zen-hide-properties-reading .markdown-reading-view .metadata-container {
-  display: none !important;
+  display: none;
 }
 
 /* === Window chrome (ports of obsidian-hider) === */
 body.zen-hide-root-tabs .mod-root .workspace-tabs .workspace-tab-header-container {
-  display: none !important;
+  display: none;
 }
 /* When the root tab bar is hidden on macOS, push the view-header right
    so the title text doesn't slide under the traffic lights. */
@@ -249,31 +250,31 @@ body.zen-hide-root-tabs.is-hidden-frameless .mod-root .view-actions {
   -webkit-app-region: no-drag;
 }
 body.zen-hide-status-bar .status-bar {
-  display: none !important;
+  display: none;
 }
 body.zen-hide-vault-name .workspace-sidedock-vault-profile,
 body.zen-hide-vault-name:not(.is-mobile)
   .workspace-split.mod-left-split
   .workspace-sidedock-vault-profile {
-  display: none !important;
+  display: none;
 }
 body.zen-hide-scrollbars ::-webkit-scrollbar {
-  display: none !important;
+  display: none;
 }
 body.zen-hide-tooltips .tooltip {
-  display: none !important;
+  display: none;
 }
 
 /* === Search & modals === */
 body.zen-hide-search-suggestions
   .suggestion-container.mod-search-suggestion {
-  display: none !important;
+  display: none;
 }
 body.zen-hide-search-counts .tree-item-flair:not(.tag-pane-tag-count) {
-  display: none !important;
+  display: none;
 }
 body.zen-hide-modal-instructions .prompt-instructions {
-  display: none !important;
+  display: none;
 }
 
 /* === Settings tab — tighter spacing === */
@@ -302,8 +303,8 @@ body.zen-hide-modal-instructions .prompt-instructions {
 }
 
 /* === Sync tab === */
-.zen-sync {
-  padding: 0 !important;
+.workspace-leaf-content[data-type="zen-sync"] > .view-content.zen-sync {
+  padding: 0;
 }
 .zen-sync-body {
   display: flex;
