@@ -1,6 +1,6 @@
 # obsidian-zen — state
 
-_Updated: 2026-10-09 13:25 by orchestrator. Live state only, max ~80 lines. History → docs/journal.md._
+_Updated: 2026-10-09 13:26 by orchestrator. Live state only, max ~80 lines. History → docs/journal.md._
 
 ## Direction
 Not in Compass (~/dev/brief/baseline.md missing on lab2). Maintenance mode: plugin is shipped; keep it healthy, answer contributors, cut releases when Merlin says.
@@ -22,13 +22,13 @@ acceptance: build result, problems with file:line, draft review comment
 validation: npm run build on the PR head
 do not touch: GitHub (no comment/merge), main
 
-### Q2 Build check on PRs [running] [box]
+### Q2 Build check on PRs [landed] [box]
 goal: workflow that runs `npm ci && npm run build` on pull_request and push to main
 acceptance: .github/workflows/ci.yml, release.yml untouched
 validation: actionlint or YAML parse; build passes locally
 do not touch: release.yml, plugin code
 
-### Q3 Release checklist [running] [box]
+### Q3 Release checklist [landed] [box]
 goal: docs/RELEASE.md: bump package/manifest/versions.json, build, tag, push tag, check release assets + store
 acceptance: matches release.yml and how 1.1.0–1.1.4 were cut (git log)
 validation: none (docs)
@@ -41,4 +41,4 @@ validation: npm ci && npm run build; manual look by Merlin
 do not touch: setting keys/defaults, release files
 
 ## Rundown
-Released 1.1.5 (PR #1 drag from file tree, fixed) and 1.1.6 (settings tabs), both tested by Merlin. Next: Q2 build check on PRs, Q3 release checklist (need go).
+Released 1.1.5 (PR #1) and 1.1.6 (settings tabs). Landed locally: CI build check (Q2), docs/RELEASE.md (Q3); main push pending Merlin's go. Queue empty.

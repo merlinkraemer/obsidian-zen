@@ -11,3 +11,5 @@
 2026-10-09 13:25 orchestrator Q4 landed: settings tabs on main (f71436e), released 1.1.6 with Merlin's go; worktrees removed
 2026-10-09 13:26 orchestrator Q2 spawn: CI build check
 2026-10-09 13:26 orchestrator Q3 spawn: release checklist
+2026-10-09 13:26 orchestrator Q2 landed: .github/workflows/ci.yml (build on PR + main), YAML + build verified
+2026-10-09 13:26 orchestrator Q3 landed: docs/RELEASE.md

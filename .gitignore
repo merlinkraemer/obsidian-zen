@@ -10,3 +10,4 @@ docs/*
 !docs/RELEASE.md
 dist/
 *.tsbuildinfo
+.claude/worktrees/
