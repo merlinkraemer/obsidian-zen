@@ -621,6 +621,16 @@ function buildScrollOffsetExtension(plugin: ObsidianZenPlugin) {
   );
 }
 
+/** Tabs of the settings pane, in order. Remembered for the session only. */
+const SETTINGS_TABS: { name: string; groups: Group[] }[] = [
+  { name: "Sidebar tabs", groups: ["Sidebar tabs"] },
+  { name: "Sidebar buttons & layout", groups: ["Sidebar buttons", "Sidebar layout"] },
+  { name: "Window", groups: ["Window"] },
+  { name: "Editor", groups: ["Editor"] },
+  { name: "Search & modals", groups: ["Search & modals"] },
+];
+let activeSettingsTab = 0;
+
 type SettingRow = {
   name: string;
   desc: string;
@@ -637,21 +647,65 @@ class ZenSettingTab extends PluginSettingTab {
     this.containerEl.addClass("zen-settings");
   }
 
-  /** Rendered declaratively by Obsidian and indexed for settings search. */
+  /**
+   * Rendered declaratively by Obsidian and indexed for settings search.
+   * Obsidian has no tab API, so every group is always defined (and searchable);
+   * the tab row only toggles which panel is visible via CSS.
+   */
   getSettingDefinitions(): SettingDefinitionItem[] {
-    return this.groups().map(({ heading, rows }) => ({
-      type: "group" as const,
-      heading,
-      items: rows.map((r) => ({
-        name: r.name,
-        desc: r.desc,
-        visible: r.visible,
-        render: (setting: Setting) => {
-          setting.setName(r.name).setDesc(r.desc);
-          r.render(setting);
-        },
-      })),
-    }));
+    const rowsByGroup = new Map(this.groups().map((g) => [g.heading, g.rows]));
+    const defs: SettingDefinitionItem[] = [
+      {
+        name: "Settings sections",
+        searchable: false,
+        render: (setting: Setting) => this.renderTabRow(setting),
+      },
+    ];
+    SETTINGS_TABS.forEach((tab, i) => {
+      for (const group of tab.groups) {
+        defs.push({
+          type: "group" as const,
+          // A tab holding one group needs no heading; the tab label says it.
+          heading: tab.groups.length > 1 ? group : undefined,
+          cls: `zen-tab-panel zen-tab-panel-${i}`,
+          items: (rowsByGroup.get(group) ?? []).map((r) => ({
+            name: r.name,
+            desc: r.desc,
+            visible: r.visible,
+            render: (setting: Setting) => {
+              setting.setName(r.name).setDesc(r.desc);
+              r.render(setting);
+            },
+          })),
+        });
+      }
+    });
+    return defs;
+  }
+
+  private renderTabRow(setting: Setting) {
+    const row = setting.settingEl;
+    row.empty();
+    row.addClass("zen-tabs");
+    row.setAttr("role", "tablist");
+    const apply = () => {
+      this.containerEl.dataset.zenTab = String(activeSettingsTab);
+      buttons.forEach((b, i) => {
+        const on = i === activeSettingsTab;
+        b.toggleClass("is-active", on);
+        b.setAttr("aria-selected", String(on));
+      });
+    };
+    const buttons = SETTINGS_TABS.map((tab, i) => {
+      const b = row.createEl("button", { text: tab.name, cls: "zen-tab" });
+      b.setAttr("role", "tab");
+      b.addEventListener("click", () => {
+        activeSettingsTab = i;
+        apply();
+      });
+      return b;
+    });
+    apply();
   }
 
   private groups(): { heading: string; rows: SettingRow[] }[] {

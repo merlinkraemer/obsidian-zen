@@ -327,6 +327,42 @@ body.zen-hide-modal-instructions .prompt-instructions {
   line-height: 1.3;
 }
 
+/* === Settings tabs === */
+.zen-settings .setting-item.zen-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: var(--size-4-1);
+  padding: 0 0 var(--size-4-2);
+  margin-bottom: var(--size-4-2);
+  border-bottom: 1px solid var(--background-modifier-border);
+}
+.zen-settings .zen-tab {
+  background: transparent;
+  box-shadow: none;
+  color: var(--text-muted);
+  font-size: var(--font-ui-small);
+}
+.zen-settings .zen-tab:hover {
+  background: var(--background-modifier-hover);
+  color: var(--text-normal);
+}
+.zen-settings .zen-tab.is-active {
+  background: var(--background-modifier-hover);
+  color: var(--text-accent);
+  font-weight: var(--font-semibold);
+}
+.zen-settings .zen-tab-panel {
+  display: none;
+}
+.zen-settings[data-zen-tab="0"] .zen-tab-panel-0,
+.zen-settings[data-zen-tab="1"] .zen-tab-panel-1,
+.zen-settings[data-zen-tab="2"] .zen-tab-panel-2,
+.zen-settings[data-zen-tab="3"] .zen-tab-panel-3,
+.zen-settings[data-zen-tab="4"] .zen-tab-panel-4 {
+  display: block;
+}
+
 /* === Sync tab === */
 .workspace-leaf-content[data-type="zen-sync"] > .view-content.zen-sync {
   padding: 0;
