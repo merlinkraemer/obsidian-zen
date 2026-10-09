@@ -53,7 +53,9 @@ export class SyncView extends ItemView {
   }
 
   private git(args: string[]): Promise<string> {
-    const cwd = (this.app.vault.adapter as FileSystemAdapter).getBasePath();
+    const adapter = this.app.vault.adapter;
+    if (!(adapter instanceof FileSystemAdapter)) return Promise.reject(new Error("Vault is not on the local file system."));
+    const cwd = adapter.getBasePath();
     return new Promise((resolve, reject) => {
       execFile("git", args, { cwd, env: { ...process.env, PATH: GIT_PATH } }, (err, stdout, stderr) =>
         err ? reject(new Error(stderr.trim() || err.message)) : resolve(stdout)
@@ -88,7 +90,7 @@ export class SyncView extends ItemView {
       commands: { executeCommandById: (id: string) => boolean };
     };
     if (!app.plugins.enabledPlugins.has(GIT_PLUGIN_ID)) {
-      new Notice("Obsidian Zen: enable the Git community plugin to sync.");
+      new Notice("Zen UI: enable the Git community plugin to sync.");
       return;
     }
     // The Git plugin runs the command async and emits obsidian-git:* events when done.

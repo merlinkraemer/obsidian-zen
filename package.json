@@ -1,7 +1,7 @@
 {
-  "name": "obsidian-zen",
-  "version": "1.0.1",
-  "description": "Obsidian plugin to hide all the clutter and clean up the UI.",
+  "name": "zen-ui",
+  "version": "1.1.0",
+  "description": "Hide interface clutter, tidy the sidebar, and add a git sync tab. Every tweak is a toggle.",
   "main": "main.js",
   "scripts": {
     "dev": "node esbuild.config.mjs",

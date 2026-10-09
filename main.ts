@@ -1,5 +1,6 @@
 import {
   App,
+  Notice,
   Plugin,
   PluginSettingTab,
   Setting,
@@ -52,7 +53,7 @@ const DEFAULT_SETTINGS: ZenSettings = {
   splitTabHeader: false,
   roomySidebar: true,
   showTreeLines: false,
-  defaultLeftSidebarTabs: true,
+  defaultLeftSidebarTabs: false,
   dailyNoteButton: true,
   showFilesTab: true,
   showSearchTab: true,
@@ -334,7 +335,7 @@ export default class ObsidianZenPlugin extends Plugin {
   }
 
   async loadSettings() {
-    this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
+    this.settings = Object.assign({}, DEFAULT_SETTINGS, (await this.loadData()) as Partial<ZenSettings>);
   }
 
   async saveSettings() {
@@ -399,11 +400,11 @@ export default class ObsidianZenPlugin extends Plugin {
     if (enteringZen) {
       if (!leftCollapsed) ws.leftSplit?.collapse();
       if (!rightCollapsed) ws.rightSplit?.collapse();
-      if (!isFullscreen) document.documentElement.requestFullscreen?.();
+      if (!isFullscreen) void document.documentElement.requestFullscreen?.();
     } else {
       ws.leftSplit?.expand();
       ws.rightSplit?.expand();
-      if (document.fullscreenElement) document.exitFullscreen?.();
+      if (document.fullscreenElement) void document.exitFullscreen?.();
     }
   }
 
@@ -449,9 +450,7 @@ export default class ObsidianZenPlugin extends Plugin {
       commands: { executeCommandById: (id: string) => boolean };
     }).commands;
     if (!cmds.executeCommandById("daily-notes")) {
-      console.warn(
-        "[Obsidian Zen] Daily notes core plugin is disabled — enable it in Settings → Core plugins."
-      );
+      new Notice("Zen UI: enable the daily notes core plugin to use this button.");
     }
   }
 
@@ -482,7 +481,7 @@ export default class ObsidianZenPlugin extends Plugin {
 
     if (this.settings.showFilesTab) {
       const fe = ws.getLeavesOfType("file-explorer")[0];
-      if (fe) ws.revealLeaf(fe);
+      if (fe) void ws.revealLeaf(fe);
     }
   }
 }
@@ -593,7 +592,7 @@ class ZenSettingTab extends PluginSettingTab {
       if (group === "Editor" && s.scrollOffsetEnabled) {
         new Setting(containerEl)
           .setName("Typewriter distance")
-          .setDesc("Space kept above and below the cursor. 0 turns it off.")
+          .setDesc("Distance kept above and below the cursor; use 0 to turn it off.")
           .setClass("zen-setting-sub")
           .addText((t) =>
             t
