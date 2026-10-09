@@ -31,6 +31,7 @@ interface ZenSettings {
   showFileNavHeader: boolean;
   // Window chrome
   showRootTabBar: boolean;
+  showRibbon: boolean;
   showStatusBar: boolean;
   showVaultName: boolean;
   showScrollbars: boolean;
@@ -63,6 +64,7 @@ const DEFAULT_SETTINGS: ZenSettings = {
   showSidebarToggle: true,
   showFileNavHeader: true,
   showRootTabBar: false,
+  showRibbon: false,
   showStatusBar: false,
   showVaultName: false,
   showScrollbars: false,
@@ -206,6 +208,12 @@ const TOGGLES: ToggleDef[] = [
     group: "Window",
   },
   {
+    key: "showRibbon",
+    name: "Ribbon",
+    desc: "Icon strip on the far left. Same as Appearance → Show ribbon.",
+    group: "Window",
+  },
+  {
     key: "showStatusBar",
     className: "zen-hide-status-bar",
     when: "off",
@@ -332,6 +340,15 @@ export default class ObsidianZenPlugin extends Plugin {
       if (t.className) document.body.classList.remove(t.className);
     }
     this.removeDailyNoteButtons();
+    if (!this.settings.showRibbon) this.setVaultConfig("showRibbon", true);
+  }
+
+  getVaultConfig(key: string): unknown {
+    return (this.app.vault as unknown as { getConfig: (k: string) => unknown }).getConfig(key);
+  }
+
+  setVaultConfig(key: string, value: unknown) {
+    (this.app.vault as unknown as { setConfig: (k: string, v: unknown) => void }).setConfig(key, value);
   }
 
   async loadSettings() {
@@ -371,6 +388,10 @@ export default class ObsidianZenPlugin extends Plugin {
   }
 
   applyAll() {
+    // Use Obsidian's own setting so the window frame spacing updates with it.
+    if (this.getVaultConfig("showRibbon") !== this.settings.showRibbon) {
+      this.setVaultConfig("showRibbon", this.settings.showRibbon);
+    }
     for (const t of TOGGLES) {
       if (!t.className || !t.when) continue;
       const v = this.settings[t.key] as boolean;
