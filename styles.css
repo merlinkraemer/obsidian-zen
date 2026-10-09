@@ -40,6 +40,13 @@ body.is-hidden-frameless:not(.is-fullscreen)
   :is(.workspace-tab-header, .clickable-icon, .sidebar-toggle-button) {
   -webkit-app-region: no-drag;
 }
+/* Window buttons hidden: reclaim the space Obsidian reserves for them. */
+body.zen-hide-traffic-lights {
+  --frame-left-space: 0px !important;
+}
+body.zen-hide-traffic-lights .workspace-ribbon.mod-left {
+  margin-top: 0;
+}
 /* The bottom bar no longer sits next to the traffic lights. */
 body.is-hidden-frameless:not(.is-fullscreen).zen-tab-header-bottom
   .workspace-tabs.mod-top-left-space

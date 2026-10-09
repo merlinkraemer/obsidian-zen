@@ -1,6 +1,7 @@
 import {
   App,
   Notice,
+  Platform,
   Plugin,
   PluginSettingTab,
   Setting,
@@ -32,6 +33,7 @@ interface ZenSettings {
   // Window chrome
   showRootTabBar: boolean;
   showRibbon: boolean;
+  showTrafficLights: boolean;
   showStatusBar: boolean;
   showVaultName: boolean;
   showScrollbars: boolean;
@@ -65,6 +67,7 @@ const DEFAULT_SETTINGS: ZenSettings = {
   showFileNavHeader: true,
   showRootTabBar: false,
   showRibbon: false,
+  showTrafficLights: false,
   showStatusBar: false,
   showVaultName: false,
   showScrollbars: false,
@@ -214,6 +217,14 @@ const TOGGLES: ToggleDef[] = [
     group: "Window",
   },
   {
+    key: "showTrafficLights",
+    className: "zen-hide-traffic-lights",
+    when: "off",
+    name: "Window buttons",
+    desc: "Close, minimize and zoom buttons on macOS. When off, use Cmd+W and Cmd+Q.",
+    group: "Window",
+  },
+  {
     key: "showStatusBar",
     className: "zen-hide-status-bar",
     when: "off",
@@ -331,6 +342,12 @@ export default class ObsidianZenPlugin extends Plugin {
     });
 
     this.registerEvent(
+      this.app.workspace.on("window-open", (_w, win) =>
+        setWindowButtons(win, this.settings.showTrafficLights)
+      )
+    );
+
+    this.registerEvent(
       this.app.workspace.on("layout-change", () => this.refreshDailyNoteButtons())
     );
   }
@@ -341,6 +358,7 @@ export default class ObsidianZenPlugin extends Plugin {
     }
     this.removeDailyNoteButtons();
     if (!this.settings.showRibbon) this.setVaultConfig("showRibbon", true);
+    setWindowButtons(window, true);
   }
 
   getVaultConfig(key: string): unknown {
@@ -392,6 +410,7 @@ export default class ObsidianZenPlugin extends Plugin {
     if (this.getVaultConfig("showRibbon") !== this.settings.showRibbon) {
       this.setVaultConfig("showRibbon", this.settings.showRibbon);
     }
+    setWindowButtons(window, this.settings.showTrafficLights);
     for (const t of TOGGLES) {
       if (!t.className || !t.when) continue;
       const v = this.settings[t.key] as boolean;
@@ -505,6 +524,15 @@ export default class ObsidianZenPlugin extends Plugin {
       if (fe) void ws.revealLeaf(fe);
     }
   }
+}
+
+/** Show or hide the macOS traffic lights. Obsidian exposes the Electron window as `electronWindow`. */
+function setWindowButtons(win: Window, visible: boolean) {
+  if (!Platform.isMacOS) return;
+  const ew = (win as unknown as {
+    electronWindow?: { setWindowButtonVisibility?: (v: boolean) => void };
+  }).electronWindow;
+  ew?.setWindowButtonVisibility?.(visible);
 }
 
 function buildScrollOffsetExtension(plugin: ObsidianZenPlugin) {
