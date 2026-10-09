@@ -260,3 +260,91 @@ body.zen-hide-modal-instructions .prompt-instructions {
   font-size: var(--font-ui-smaller);
   line-height: 1.3;
 }
+
+/* === Sync tab === */
+.zen-sync {
+  display: flex;
+  flex-direction: column;
+  gap: var(--size-4-3);
+  padding: var(--size-4-3);
+}
+.zen-sync-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--size-4-2);
+}
+.zen-sync-actions button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--size-4-1);
+}
+.zen-sync-actions button:first-child {
+  grid-column: span 2;
+}
+.zen-sync-btn-icon {
+  display: flex;
+}
+.zen-sync-btn-icon svg {
+  width: var(--icon-s);
+  height: var(--icon-s);
+}
+.zen-sync-busy {
+  color: var(--text-muted);
+  font-size: var(--font-ui-small);
+}
+.zen-sync-error {
+  color: var(--text-error);
+  font-size: var(--font-ui-small);
+  white-space: pre-wrap;
+}
+.zen-sync-summary {
+  display: flex;
+  flex-direction: column;
+  gap: var(--size-4-1);
+  font-size: var(--font-ui-small);
+}
+.zen-sync-row {
+  display: flex;
+  gap: var(--size-4-2);
+}
+.zen-sync-label {
+  flex: 0 0 5.5em;
+  color: var(--text-muted);
+}
+.zen-sync-value {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.zen-sync-value.is-ok {
+  color: var(--text-success);
+}
+.zen-sync-value.is-warn {
+  color: var(--text-warning);
+}
+.zen-sync-heading {
+  color: var(--text-muted);
+  font-size: var(--font-ui-smaller);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.zen-sync-changes {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: var(--font-ui-small);
+}
+.zen-sync-change {
+  display: flex;
+  gap: var(--size-4-2);
+  white-space: nowrap;
+}
+.zen-sync-code {
+  flex: 0 0 1.5em;
+  color: var(--text-faint);
+  font-family: var(--font-monospace);
+}
+.zen-sync-path {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

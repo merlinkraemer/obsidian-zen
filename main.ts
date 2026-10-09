@@ -6,6 +6,7 @@ import {
   WorkspaceLeaf,
   setIcon,
 } from "obsidian";
+import { SyncView, SYNC_VIEW_TYPE } from "./sync-view";
 import { EditorView, ViewPlugin, ViewUpdate } from "@codemirror/view";
 import { Prec } from "@codemirror/state";
 
@@ -21,6 +22,7 @@ interface ZenSettings {
   dailyNoteButton: boolean;
   showFilesTab: boolean;
   showSearchTab: boolean;
+  showSyncTab: boolean;
   showNewTab: boolean;
   showTabList: boolean;
   showSidebarToggle: boolean;
@@ -53,6 +55,7 @@ const DEFAULT_SETTINGS: ZenSettings = {
   dailyNoteButton: true,
   showFilesTab: true,
   showSearchTab: true,
+  showSyncTab: true,
   showNewTab: true,
   showTabList: true,
   showSidebarToggle: true,
@@ -135,7 +138,7 @@ const TOGGLES: ToggleDef[] = [
   {
     key: "defaultLeftSidebarTabs",
     name: "Default sidebar tabs on startup",
-    desc: "On startup, detach any sidebar tab not enabled below (Files, Search). You can still add others manually.",
+    desc: "On startup, detach any sidebar tab not enabled below (Files, Search, Sync). You can still add others manually.",
     group: "Sidebar layout",
   },
   // Sidebar header
@@ -149,6 +152,12 @@ const TOGGLES: ToggleDef[] = [
     key: "showSearchTab",
     name: "Show Search tab",
     desc: "Search tab in the sidebar.",
+    group: "Sidebar header",
+  },
+  {
+    key: "showSyncTab",
+    name: "Show Sync tab",
+    desc: "Git sync status with pull and push buttons (requires the Git community plugin).",
     group: "Sidebar header",
   },
   {
@@ -295,6 +304,7 @@ export default class ObsidianZenPlugin extends Plugin {
     await this.loadSettings();
     this.applyAll();
     this.addSettingTab(new ZenSettingTab(this.app, this));
+    this.registerView(SYNC_VIEW_TYPE, (leaf) => new SyncView(leaf));
 
     this.registerEditorExtension(buildScrollOffsetExtension(this));
 
@@ -307,6 +317,8 @@ export default class ObsidianZenPlugin extends Plugin {
     this.app.workspace.onLayoutReady(() => {
       if (this.settings.defaultLeftSidebarTabs) {
         void this.ensureDefaultSidebarTabs();
+      } else {
+        void this.syncTabVisibility();
       }
       this.refreshDailyNoteButtons();
     });
@@ -331,6 +343,17 @@ export default class ObsidianZenPlugin extends Plugin {
     await this.saveData(this.settings);
     this.applyAll();
     this.refreshDailyNoteButtons();
+    await this.syncTabVisibility();
+  }
+
+  async syncTabVisibility() {
+    const ws = this.app.workspace;
+    const leaves = ws.getLeavesOfType(SYNC_VIEW_TYPE);
+    if (!this.settings.showSyncTab) {
+      leaves.forEach((l) => l.detach());
+    } else if (leaves.length === 0) {
+      await ws.getLeftLeaf(true)?.setViewState({ type: SYNC_VIEW_TYPE, active: false });
+    }
   }
 
   applyAll() {
@@ -424,6 +447,7 @@ export default class ObsidianZenPlugin extends Plugin {
     const allowed = new Set<string>();
     if (this.settings.showFilesTab) allowed.add("file-explorer");
     if (this.settings.showSearchTab) allowed.add("search");
+    if (this.settings.showSyncTab) allowed.add(SYNC_VIEW_TYPE);
 
     const sideLeaves: WorkspaceLeaf[] = [];
     ws.iterateAllLeaves((leaf) => {
@@ -441,6 +465,7 @@ export default class ObsidianZenPlugin extends Plugin {
     };
     if (this.settings.showFilesTab) await ensure("file-explorer", true);
     if (this.settings.showSearchTab) await ensure("search", false);
+    if (this.settings.showSyncTab) await ensure(SYNC_VIEW_TYPE, false);
 
     if (this.settings.showFilesTab) {
       const fe = ws.getLeavesOfType("file-explorer")[0];
