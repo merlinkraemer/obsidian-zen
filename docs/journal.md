@@ -9,3 +9,5 @@
 2026-10-09 13:21 orchestrator Q4 spawn: settings tabs (Merlin asked, for next update)
 2026-10-09 13:21 orchestrator Q4 followup: feat/settings-tabs 4de209a, 5 tabs, build green, installed in Mac vault for manual test
 2026-10-09 13:25 orchestrator Q4 landed: settings tabs on main (f71436e), released 1.1.6 with Merlin's go; worktrees removed
+2026-10-09 13:26 orchestrator Q2 spawn: CI build check
+2026-10-09 13:26 orchestrator Q3 spawn: release checklist

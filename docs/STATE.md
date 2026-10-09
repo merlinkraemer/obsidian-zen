@@ -22,13 +22,13 @@ acceptance: build result, problems with file:line, draft review comment
 validation: npm run build on the PR head
 do not touch: GitHub (no comment/merge), main
 
-### Q2 Build check on PRs [queued] [box]
+### Q2 Build check on PRs [running] [box]
 goal: workflow that runs `npm ci && npm run build` on pull_request and push to main
 acceptance: .github/workflows/ci.yml, release.yml untouched
 validation: actionlint or YAML parse; build passes locally
 do not touch: release.yml, plugin code
 
-### Q3 Release checklist [queued] [box]
+### Q3 Release checklist [running] [box]
 goal: docs/RELEASE.md: bump package/manifest/versions.json, build, tag, push tag, check release assets + store
 acceptance: matches release.yml and how 1.1.0–1.1.4 were cut (git log)
 validation: none (docs)
