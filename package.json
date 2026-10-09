@@ -1,7 +1,7 @@
 {
   "name": "zen-ui",
   "version": "1.1.2",
-  "description": "Make it zen! Hide all clutter and focus on what's important.",
+  "description": "make it zen! hide all clutter - focus on what's important",
   "main": "main.js",
   "scripts": {
     "dev": "node esbuild.config.mjs",
