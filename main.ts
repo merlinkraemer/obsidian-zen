@@ -4,6 +4,7 @@ import {
   PluginSettingTab,
   Setting,
   WorkspaceLeaf,
+  WorkspaceSplit,
   setIcon,
 } from "obsidian";
 import { SyncView, SYNC_VIEW_TYPE } from "./sync-view";
@@ -76,9 +77,10 @@ const DEFAULT_SETTINGS: ZenSettings = {
 };
 
 type Group =
+  | "Sidebar tabs"
+  | "Sidebar buttons"
   | "Sidebar layout"
-  | "Sidebar header"
-  | "Window chrome"
+  | "Window"
   | "Editor"
   | "Search & modals";
 
@@ -91,175 +93,170 @@ type ToggleDef = {
   className?: string;
   /** "on" = add class when setting is true; "off" = add class when setting is false */
   when?: "on" | "off";
+  /** Rendered by a custom control instead of a toggle. */
+  custom?: true;
 };
 
 const TOGGLES: ToggleDef[] = [
+  // Sidebar tabs
+  { key: "showFilesTab", name: "Files", desc: "File explorer tab.", group: "Sidebar tabs" },
+  { key: "showSearchTab", name: "Search", desc: "Search tab.", group: "Sidebar tabs" },
+  {
+    key: "showSyncTab",
+    name: "Sync",
+    desc: "Git sync status with pull and push. Requires the Git community plugin.",
+    group: "Sidebar tabs",
+  },
+  {
+    key: "defaultLeftSidebarTabs",
+    name: "Remove other tabs on startup",
+    desc: "Close any sidebar tab not enabled above. You can still open others manually.",
+    group: "Sidebar tabs",
+  },
+  // Sidebar buttons
+  {
+    key: "dailyNoteButton",
+    name: "Daily note",
+    desc: "Opens today's daily note. Requires the core Daily notes plugin.",
+    group: "Sidebar buttons",
+  },
+  {
+    key: "showNewTab",
+    className: "zen-hide-new-tab",
+    when: "off",
+    name: "New tab (+)",
+    desc: "Adds a tab to the sidebar.",
+    group: "Sidebar buttons",
+  },
+  {
+    key: "showTabList",
+    className: "zen-hide-tab-list",
+    when: "off",
+    name: "Tab list",
+    desc: "Dropdown listing all sidebar tabs.",
+    group: "Sidebar buttons",
+  },
+  {
+    key: "showSidebarToggle",
+    className: "zen-hide-sidebar-toggle",
+    when: "off",
+    name: "Sidebar toggle",
+    desc: "Collapses and expands the sidebars.",
+    group: "Sidebar buttons",
+  },
+  {
+    key: "showFileNavHeader",
+    className: "zen-hide-file-nav-header",
+    when: "off",
+    name: "File explorer actions",
+    desc: "New note, new folder and sort buttons above the file tree.",
+    group: "Sidebar buttons",
+  },
   // Sidebar layout
   {
     key: "tabHeaderBottom",
     className: "zen-tab-header-bottom",
     when: "on",
-    name: "Tab header at bottom",
-    desc: "Move the sidebar tab header bar to the bottom of the sidebar.",
+    name: "",
+    desc: "",
     group: "Sidebar layout",
-  },
-  {
-    key: "tabHeaderRightAlign",
-    className: "zen-tab-header-right",
-    when: "on",
-    name: "Right-align tab header icons",
-    desc: "Push tabs and buttons in the sidebar tab header to the right edge.",
-    group: "Sidebar layout",
+    custom: true,
   },
   {
     key: "splitTabHeader",
     className: "zen-split-tab-header",
     when: "on",
-    name: "Split tab header",
-    desc: "Keep tabs at the top, pin action icons to the bottom. Turn off 'Tab header at bottom' when using this.",
+    name: "",
+    desc: "",
+    group: "Sidebar layout",
+    custom: true,
+  },
+  {
+    key: "tabHeaderRightAlign",
+    className: "zen-tab-header-right",
+    when: "on",
+    name: "Right-align tab bar",
+    desc: "Push tabs and buttons to the right edge.",
     group: "Sidebar layout",
   },
   {
     key: "roomySidebar",
     className: "zen-roomy-sidebar",
     when: "on",
-    name: "Roomy sidebar spacing",
-    desc: "Extra padding in the file explorer.",
+    name: "Roomy file tree",
+    desc: "Extra padding between files and folders.",
     group: "Sidebar layout",
   },
   {
     key: "showTreeLines",
     className: "zen-hide-tree-lines",
     when: "off",
-    name: "Show tree indent lines",
-    desc: "Vertical guide lines for nested folders and files.",
+    name: "Indent lines",
+    desc: "Vertical guide lines for nested folders.",
     group: "Sidebar layout",
   },
-  {
-    key: "defaultLeftSidebarTabs",
-    name: "Default sidebar tabs on startup",
-    desc: "On startup, detach any sidebar tab not enabled below (Files, Search, Sync). You can still add others manually.",
-    group: "Sidebar layout",
-  },
-  // Sidebar header
-  {
-    key: "showFilesTab",
-    name: "Show Files tab",
-    desc: "File explorer tab in the sidebar.",
-    group: "Sidebar header",
-  },
-  {
-    key: "showSearchTab",
-    name: "Show Search tab",
-    desc: "Search tab in the sidebar.",
-    group: "Sidebar header",
-  },
-  {
-    key: "showSyncTab",
-    name: "Show Sync tab",
-    desc: "Git sync status with pull and push buttons (requires the Git community plugin).",
-    group: "Sidebar header",
-  },
-  {
-    key: "dailyNoteButton",
-    name: "Show daily note button",
-    desc: "Calendar icon in the tab header that opens today's daily note (requires the core Daily notes plugin).",
-    group: "Sidebar header",
-  },
-  {
-    key: "showNewTab",
-    className: "zen-hide-new-tab",
-    when: "off",
-    name: "Show new tab (+) button",
-    desc: "Plus button in the sidebar tab header.",
-    group: "Sidebar header",
-  },
-  {
-    key: "showTabList",
-    className: "zen-hide-tab-list",
-    when: "off",
-    name: "Show tab list dropdown",
-    desc: "Chevron-down dropdown in the sidebar tab header.",
-    group: "Sidebar header",
-  },
-  {
-    key: "showSidebarToggle",
-    className: "zen-hide-sidebar-toggle",
-    when: "off",
-    name: "Show sidebar toggle button",
-    desc: "Left and right sidebar collapse/expand buttons.",
-    group: "Sidebar header",
-  },
-  {
-    key: "showFileNavHeader",
-    className: "zen-hide-file-nav-header",
-    when: "off",
-    name: "Show file explorer action bar",
-    desc: "Action button row (new note, sort, etc.) at the top of the file explorer.",
-    group: "Sidebar header",
-  },
-  // Window chrome
+  // Window
   {
     key: "showRootTabBar",
     className: "zen-hide-root-tabs",
     when: "off",
-    name: "Show root tab bar",
-    desc: "Tab container at the top of the main editor window.",
-    group: "Window chrome",
+    name: "Editor tab bar",
+    desc: "Tabs above the main editor.",
+    group: "Window",
   },
   {
     key: "showStatusBar",
     className: "zen-hide-status-bar",
     when: "off",
-    name: "Show status bar",
-    desc: "Word count, character count, backlink count at the bottom of the window.",
-    group: "Window chrome",
+    name: "Status bar",
+    desc: "Word count and plugin info at the bottom of the window.",
+    group: "Window",
   },
   {
     key: "showVaultName",
     className: "zen-hide-vault-name",
     when: "off",
-    name: "Show vault name",
-    desc: "Vault profile in the left sidebar. Warning: also hides Settings and vault switcher icons — use hotkeys or the command palette instead.",
-    group: "Window chrome",
+    name: "Vault name",
+    desc: "Vault switcher and settings icons. When off, use hotkeys or the command palette.",
+    group: "Window",
   },
   {
     key: "showScrollbars",
     className: "zen-hide-scrollbars",
     when: "off",
-    name: "Show scrollbars",
+    name: "Scrollbars",
     desc: "All scrollbars across the app.",
-    group: "Window chrome",
+    group: "Window",
   },
   {
     key: "showTooltips",
     className: "zen-hide-tooltips",
     when: "off",
-    name: "Show tooltips",
-    desc: "Hover tooltips on icons and buttons.",
-    group: "Window chrome",
+    name: "Tooltips",
+    desc: "Hover labels on icons and buttons.",
+    group: "Window",
   },
   // Editor
   {
     key: "highlightActiveLine",
     className: "zen-no-line-highlight",
     when: "off",
-    name: "Highlight current line",
-    desc: "Background tint on the line that contains the cursor.",
+    name: "Current line highlight",
+    desc: "Tint the line with the cursor.",
     group: "Editor",
   },
   {
     key: "showPropertiesReading",
     className: "zen-hide-properties-reading",
     when: "off",
-    name: "Show properties in reading view",
-    desc: "Frontmatter properties section in reading mode.",
+    name: "Properties in reading view",
+    desc: "Frontmatter block at the top of notes in reading mode.",
     group: "Editor",
   },
   {
     key: "scrollOffsetEnabled",
-    name: "Scroll offset (typewriter scrolling)",
-    desc: "Keep the cursor a configurable distance from the top and bottom of the editor.",
+    name: "Typewriter scrolling",
+    desc: "Keep the cursor away from the top and bottom edges.",
     group: "Editor",
   },
   // Search & modals
@@ -267,34 +264,35 @@ const TOGGLES: ToggleDef[] = [
     key: "showSearchSuggestions",
     className: "zen-hide-search-suggestions",
     when: "off",
-    name: "Show search suggestions",
-    desc: "Suggestions popover under the search input.",
+    name: "Search suggestions",
+    desc: "Popover under the search input.",
     group: "Search & modals",
   },
   {
     key: "showSearchCounts",
     className: "zen-hide-search-counts",
     when: "off",
-    name: "Show search match counts",
-    desc: "Number of matches per result in the search pane.",
+    name: "Match counts",
+    desc: "Number of matches per search result.",
     group: "Search & modals",
   },
   {
     key: "showModalInstructions",
     className: "zen-hide-modal-instructions",
     when: "off",
-    name: "Show modal instructions",
-    desc: "Instructional tip rows at the bottom of modals (e.g. command palette).",
+    name: "Modal hints",
+    desc: "Keyboard hint row at the bottom of the command palette and other modals.",
     group: "Search & modals",
   },
 ];
 
 const GROUP_ORDER: Group[] = [
-  "Window chrome",
-  "Sidebar header",
-  "Search & modals",
-  "Editor",
+  "Sidebar tabs",
+  "Sidebar buttons",
   "Sidebar layout",
+  "Window",
+  "Editor",
+  "Search & modals",
 ];
 
 export default class ObsidianZenPlugin extends Plugin {
@@ -351,9 +349,24 @@ export default class ObsidianZenPlugin extends Plugin {
     const leaves = ws.getLeavesOfType(SYNC_VIEW_TYPE);
     if (!this.settings.showSyncTab) {
       leaves.forEach((l) => l.detach());
-    } else if (leaves.length === 0) {
-      await ws.getLeftLeaf(true)?.setViewState({ type: SYNC_VIEW_TYPE, active: false });
+    } else {
+      await this.placeSyncTab();
     }
+  }
+
+  /** Put the Sync tab in the same tab group as Files (or Search), wherever that sidebar is. */
+  async placeSyncTab() {
+    const ws = this.app.workspace;
+    const anchor =
+      ws.getLeavesOfType("file-explorer")[0] ?? ws.getLeavesOfType("search")[0];
+    const group = anchor?.parent as unknown as WorkspaceSplit | undefined;
+    const existing = ws.getLeavesOfType(SYNC_VIEW_TYPE);
+    if (existing.length && existing.every((l) => l.parent === anchor?.parent)) return;
+    existing.forEach((l) => l.detach());
+    const leaf = group
+      ? ws.createLeafInParent(group, (group as unknown as { children: unknown[] }).children.length)
+      : ws.getLeftLeaf(false);
+    await leaf?.setViewState({ type: SYNC_VIEW_TYPE, active: false });
   }
 
   applyAll() {
@@ -465,7 +478,7 @@ export default class ObsidianZenPlugin extends Plugin {
     };
     if (this.settings.showFilesTab) await ensure("file-explorer", true);
     if (this.settings.showSearchTab) await ensure("search", false);
-    if (this.settings.showSyncTab) await ensure(SYNC_VIEW_TYPE, false);
+    if (this.settings.showSyncTab) await this.placeSyncTab();
 
     if (this.settings.showFilesTab) {
       const fe = ws.getLeavesOfType("file-explorer")[0];
@@ -534,52 +547,70 @@ class ZenSettingTab extends PluginSettingTab {
 
   display(): void {
     const { containerEl } = this;
+    const s = this.plugin.settings;
+    const save = async (redraw = false) => {
+      await this.plugin.saveSettings();
+      if (redraw) this.display();
+    };
     containerEl.empty();
     containerEl.addClass("zen-settings");
+    containerEl.createEl("p", {
+      cls: "zen-settings-intro",
+      text: "Toggles show or enable each element. Turn one off to hide it.",
+    });
 
     for (const group of GROUP_ORDER) {
       new Setting(containerEl).setName(group).setHeading();
-      for (const t of TOGGLES.filter((x) => x.group === group)) {
+
+      if (group === "Sidebar layout") {
         new Setting(containerEl)
-          .setName(t.name)
-          .setDesc(t.desc)
-          .addToggle((tg) =>
-            tg
-              .setValue(this.plugin.settings[t.key] as boolean)
+          .setName("Tab bar position")
+          .setDesc("Where the sidebar tabs and buttons sit. Split keeps tabs on top and buttons at the bottom.")
+          .addDropdown((d) =>
+            d
+              .addOptions({ top: "Top", bottom: "Bottom", split: "Split" })
+              .setValue(s.splitTabHeader ? "split" : s.tabHeaderBottom ? "bottom" : "top")
               .onChange(async (v) => {
-                (this.plugin.settings[t.key] as boolean) = v;
-                await this.plugin.saveSettings();
+                s.tabHeaderBottom = v === "bottom";
+                s.splitTabHeader = v === "split";
+                await save();
               })
           );
       }
 
-      if (group === "Editor") {
+      for (const t of TOGGLES.filter((x) => x.group === group && !x.custom)) {
         new Setting(containerEl)
-          .setName("Scroll offset uses percentage")
-          .setDesc(
-            "Treat the distance value below as a percentage of editor height. Off = pixels."
-          )
+          .setName(t.name)
+          .setDesc(t.desc)
           .addToggle((tg) =>
-            tg
-              .setValue(this.plugin.settings.scrollOffsetPercentage)
-              .onChange(async (v) => {
-                this.plugin.settings.scrollOffsetPercentage = v;
-                await this.plugin.saveSettings();
-              })
+            tg.setValue(s[t.key] as boolean).onChange(async (v) => {
+              (s[t.key] as boolean) = v;
+              await save(t.key === "scrollOffsetEnabled");
+            })
           );
+      }
 
+      if (group === "Editor" && s.scrollOffsetEnabled) {
         new Setting(containerEl)
-          .setName("Scroll offset distance")
-          .setDesc(
-            'Minimum distance kept above and below the cursor. Unit: % of editor height (default) or px. 0 disables.'
-          )
+          .setName("Typewriter distance")
+          .setDesc("Space kept above and below the cursor. 0 turns it off.")
+          .setClass("zen-setting-sub")
           .addText((t) =>
             t
               .setPlaceholder("25")
-              .setValue(this.plugin.settings.scrollOffsetValue)
+              .setValue(s.scrollOffsetValue)
               .onChange(async (v) => {
-                this.plugin.settings.scrollOffsetValue = v;
-                await this.plugin.saveSettings();
+                s.scrollOffsetValue = v;
+                await save();
+              })
+          )
+          .addDropdown((d) =>
+            d
+              .addOptions({ percent: "% of editor", px: "px" })
+              .setValue(s.scrollOffsetPercentage ? "percent" : "px")
+              .onChange(async (v) => {
+                s.scrollOffsetPercentage = v === "percent";
+                await save();
               })
           );
       }

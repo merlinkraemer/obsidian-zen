@@ -348,3 +348,18 @@ body.zen-hide-modal-instructions .prompt-instructions {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+.zen-settings-intro {
+  color: var(--text-muted);
+  font-size: var(--font-ui-small);
+  margin-top: 0;
+}
+.zen-settings .zen-setting-sub {
+  padding-left: var(--size-4-6);
+}
+.zen-settings .zen-setting-sub .setting-item-control {
+  gap: var(--size-4-2);
+}
+.zen-settings .zen-setting-sub input[type="text"] {
+  width: 5em;
+}
