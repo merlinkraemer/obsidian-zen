@@ -7,3 +7,4 @@
 2026-10-09 13:21 orchestrator Q1 landed: PR #1 squash-merged (9b4d3f9) after Merlin's manual test
 2026-10-09 13:21 orchestrator - decided: Merlin approved release; 1.1.5 pushed, release workflow green, assets up
 2026-10-09 13:21 orchestrator Q4 spawn: settings tabs (Merlin asked, for next update)
+2026-10-09 13:21 orchestrator Q4 followup: feat/settings-tabs 4de209a, 5 tabs, build green, installed in Mac vault for manual test

@@ -12,7 +12,7 @@ Zen UI is live in the Obsidian community store (1.1.4, GitHub release with main.
 AGENTS.md ## Unattended. Pushing a tag = public release; always gated.
 
 ## Waiting on Merlin
-1. Settings tabs (Q4) — rec: test the worktree build in Obsidian — branch: feat/settings-tabs
+1. Settings tabs (Q4, 5 tabs) — installed in vault; rec: test, then release 1.1.6 — branch: feat/settings-tabs
 
 ## Queue
 
@@ -34,11 +34,11 @@ acceptance: matches release.yml and how 1.1.0–1.1.4 were cut (git log)
 validation: none (docs)
 do not touch: code, versions
 
-### Q4 Settings tabs [running] [box]
+### Q4 Settings tabs [blocked] [box]
 goal: split the long settings pane into tabs for the next release
 acceptance: all settings reachable, no behavior change, native look, build green
 validation: npm ci && npm run build; manual look by Merlin
 do not touch: setting keys/defaults, release files
 
 ## Rundown
-PR #1 fixed, tested by Merlin, squash-merged. 1.1.5 released (GitHub release + 3 assets). Q4 settings tabs running.
+PR #1 fixed, tested by Merlin, squash-merged. 1.1.5 released (GitHub release + 3 assets). Q4 settings tabs built (4de209a), installed for Merlin's test.
