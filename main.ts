@@ -6,7 +6,6 @@ import {
   PluginSettingTab,
   Setting,
   SettingDefinitionItem,
-  requireApiVersion,
   WorkspaceLeaf,
   WorkspaceSplit,
   setIcon,
@@ -615,7 +614,7 @@ class ZenSettingTab extends PluginSettingTab {
     this.containerEl.addClass("zen-settings");
   }
 
-  /** Obsidian 1.13+: rendered declaratively and indexed for settings search. */
+  /** Rendered declaratively by Obsidian and indexed for settings search. */
   getSettingDefinitions(): SettingDefinitionItem[] {
     return this.groups().map(({ heading, rows }) => ({
       type: "group" as const,
@@ -632,24 +631,6 @@ class ZenSettingTab extends PluginSettingTab {
     }));
   }
 
-  /** Fallback for Obsidian older than 1.13, which doesn't call getSettingDefinitions(). */
-  display(): void {
-    const { containerEl } = this;
-    containerEl.empty();
-    for (const { heading, rows } of this.groups()) {
-      new Setting(containerEl).setName(heading).setHeading();
-      for (const r of rows) {
-        if (r.visible && !r.visible()) continue;
-        r.render(new Setting(containerEl).setName(r.name).setDesc(r.desc));
-      }
-    }
-  }
-
-  private rerender() {
-    if (requireApiVersion("1.13.0")) this.update();
-    else this.display();
-  }
-
   private groups(): { heading: string; rows: SettingRow[] }[] {
     const s = this.plugin.settings;
     const save = () => this.plugin.saveSettings();
@@ -661,17 +642,18 @@ class ZenSettingTab extends PluginSettingTab {
         rows.push({
           name: "Tab bar position",
           desc: "Where the sidebar tabs and buttons sit. Split keeps tabs on top and buttons at the bottom.",
-          render: (setting) =>
+          render: (setting) => {
             setting.addDropdown((d) =>
               d
                 .addOptions({ top: "Top", bottom: "Bottom", split: "Split" })
                 .setValue(s.splitTabHeader ? "split" : s.tabHeaderBottom ? "bottom" : "top")
-                .onChange(async (v) => {
+                .onChange((v) => {
                   s.tabHeaderBottom = v === "bottom";
                   s.splitTabHeader = v === "split";
-                  await save();
+                  void save();
                 })
-            ),
+            );
+          },
         });
       }
 
@@ -679,14 +661,16 @@ class ZenSettingTab extends PluginSettingTab {
         rows.push({
           name: t.name,
           desc: t.desc,
-          render: (setting) =>
+          render: (setting) => {
             setting.addToggle((tg) =>
-              tg.setValue(s[t.key] as boolean).onChange(async (v) => {
+              tg.setValue(s[t.key] as boolean).onChange((v) => {
                 (s[t.key] as boolean) = v;
-                await save();
-                if (t.key === "scrollOffsetEnabled") this.rerender();
+                void save().then(() => {
+                  if (t.key === "scrollOffsetEnabled") this.update();
+                });
               })
-            ),
+            );
+          },
         });
       }
 
@@ -695,27 +679,28 @@ class ZenSettingTab extends PluginSettingTab {
           name: "Typewriter distance",
           desc: "Distance kept above and below the cursor; use 0 to turn it off.",
           visible: () => s.scrollOffsetEnabled,
-          render: (setting) =>
+          render: (setting) => {
             setting
               .setClass("zen-setting-sub")
               .addText((t) =>
                 t
                   .setPlaceholder("25")
                   .setValue(s.scrollOffsetValue)
-                  .onChange(async (v) => {
+                  .onChange((v) => {
                     s.scrollOffsetValue = v;
-                    await save();
+                    void save();
                   })
               )
               .addDropdown((d) =>
                 d
                   .addOptions({ percent: "% of editor", px: "px" })
                   .setValue(s.scrollOffsetPercentage ? "percent" : "px")
-                  .onChange(async (v) => {
+                  .onChange((v) => {
                     s.scrollOffsetPercentage = v === "percent";
-                    await save();
+                    void save();
                   })
-              ),
+              );
+          },
         });
       }
 
