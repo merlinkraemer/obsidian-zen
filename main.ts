@@ -35,6 +35,7 @@ interface ZenSettings {
   showRootTabBar: boolean;
   showRibbon: boolean;
   showViewHeader: boolean;
+  dragFileTree: boolean;
   showTrafficLights: boolean;
   showStatusBar: boolean;
   showVaultName: boolean;
@@ -70,6 +71,7 @@ const DEFAULT_SETTINGS: ZenSettings = {
   showRootTabBar: false,
   showRibbon: false,
   showViewHeader: true,
+  dragFileTree: false,
   showTrafficLights: false,
   showStatusBar: false,
   showVaultName: false,
@@ -223,6 +225,14 @@ const TOGGLES: ToggleDef[] = [
     key: "showViewHeader",
     name: "Note title bar",
     desc: "Bar above each note with its title. It's also where you drag the window; when off, drag by the empty part of a sidebar tab bar instead.",
+    group: "Window",
+  },
+  {
+    key: "dragFileTree",
+    className: "zen-drag-file-tree",
+    when: "on",
+    name: "Drag window from file tree",
+    desc: "Empty space in the file explorer moves the window, like a title bar. Files and folders stay clickable.",
     group: "Window",
   },
   {
