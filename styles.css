@@ -27,19 +27,15 @@ body.zen-tab-header-bottom
 }
 
 /* === Window frame (macOS hidden title bar) ===
-   With the tab bar moved to the bottom, the top of each sidebar still needs
-   room for the traffic lights and a strip to drag the window by. */
+   With the tab bar moved to the bottom, a left sidebar still needs room for
+   the traffic lights. The right sidebar has none, so it keeps its full height. */
 body.is-hidden-frameless:not(.is-fullscreen).zen-tab-header-bottom
-  .workspace-tabs.mod-top-left-space,
-body.is-hidden-frameless:not(.is-fullscreen).zen-tab-header-bottom
-  .workspace-tabs.mod-top-right-space {
+  .workspace-tabs.mod-top-left-space {
   position: relative;
   padding-top: var(--header-height);
 }
 body.is-hidden-frameless:not(.is-fullscreen).zen-tab-header-bottom
-  .workspace-tabs.mod-top-left-space::before,
-body.is-hidden-frameless:not(.is-fullscreen).zen-tab-header-bottom
-  .workspace-tabs.mod-top-right-space::before {
+  .workspace-tabs.mod-top-left-space::before {
   content: "";
   position: absolute;
   top: 0;
