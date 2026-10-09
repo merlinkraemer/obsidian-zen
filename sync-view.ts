@@ -57,7 +57,7 @@ export class SyncView extends ItemView {
     if (!(adapter instanceof FileSystemAdapter)) return Promise.reject(new Error("Vault is not on the local file system."));
     const cwd = adapter.getBasePath();
     return new Promise((resolve, reject) => {
-      execFile("git", ["-c", "core.quotePath=false", ...args], { cwd, env: { ...process.env, PATH: GIT_PATH } }, (err, stdout, stderr) =>
+      execFile("git", ["-c", "core.quotePath=false", ...args], { cwd, env: { ...process.env, PATH: GIT_PATH } }, (err: Error | null, stdout: string, stderr: string) =>
         err ? reject(new Error(stderr.trim() || err.message)) : resolve(stdout)
       );
     });

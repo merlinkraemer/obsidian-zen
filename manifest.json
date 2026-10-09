@@ -1,7 +1,7 @@
 {
   "id": "zen-ui",
   "name": "Zen UI",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "minAppVersion": "1.7.2",
   "description": "Hide interface clutter, tidy the sidebar, and add a git sync tab. Every tweak is a toggle.",
   "author": "Merlin Kraemer",

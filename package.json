@@ -1,6 +1,6 @@
 {
   "name": "zen-ui",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "Hide interface clutter, tidy the sidebar, and add a git sync tab. Every tweak is a toggle.",
   "main": "main.js",
   "scripts": {
@@ -12,10 +12,13 @@
   "license": "MIT",
   "devDependencies": {
     "@types/node": "^20.11.0",
-    "builtin-modules": "^3.3.0",
     "esbuild": "^0.21.4",
     "obsidian": "latest",
     "tslib": "^2.6.2",
     "typescript": "^5.4.5"
+  },
+  "dependencies": {
+    "@codemirror/state": "^6.7.6",
+    "@codemirror/view": "^6.43.14"
   }
 }
