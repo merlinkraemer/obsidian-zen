@@ -7,5 +7,6 @@ data.json
 docs/*
 !docs/STATE.md
 !docs/journal.md
+!docs/RELEASE.md
 dist/
 *.tsbuildinfo
