@@ -1,6 +1,6 @@
 # obsidian-zen — state
 
-_Updated: 2026-10-09 13:21 by orchestrator. Live state only, max ~80 lines. History → docs/journal.md._
+_Updated: 2026-10-09 13:25 by orchestrator. Live state only, max ~80 lines. History → docs/journal.md._
 
 ## Direction
 Not in Compass (~/dev/brief/baseline.md missing on lab2). Maintenance mode: plugin is shipped; keep it healthy, answer contributors, cut releases when Merlin says.
@@ -12,7 +12,7 @@ Zen UI is live in the Obsidian community store (1.1.4, GitHub release with main.
 AGENTS.md ## Unattended. Pushing a tag = public release; always gated.
 
 ## Waiting on Merlin
-1. Settings tabs (Q4, 5 tabs) — installed in vault; rec: test, then release 1.1.6 — branch: feat/settings-tabs
+(none)
 
 ## Queue
 
@@ -34,11 +34,11 @@ acceptance: matches release.yml and how 1.1.0–1.1.4 were cut (git log)
 validation: none (docs)
 do not touch: code, versions
 
-### Q4 Settings tabs [blocked] [box]
+### Q4 Settings tabs [landed] [box]
 goal: split the long settings pane into tabs for the next release
 acceptance: all settings reachable, no behavior change, native look, build green
 validation: npm ci && npm run build; manual look by Merlin
 do not touch: setting keys/defaults, release files
 
 ## Rundown
-PR #1 fixed, tested by Merlin, squash-merged. 1.1.5 released (GitHub release + 3 assets). Q4 settings tabs built (4de209a), installed for Merlin's test.
+Released 1.1.5 (PR #1 drag from file tree, fixed) and 1.1.6 (settings tabs), both tested by Merlin. Next: Q2 build check on PRs, Q3 release checklist (need go).
