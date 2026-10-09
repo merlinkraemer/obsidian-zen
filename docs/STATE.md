@@ -1,6 +1,6 @@
 # obsidian-zen — state
 
-_Updated: 2026-10-09 13:06 by orchestrator. Live state only, max ~80 lines. History → docs/journal.md._
+_Updated: 2026-10-09 13:12 by orchestrator. Live state only, max ~80 lines. History → docs/journal.md._
 
 ## Direction
 Not in Compass (~/dev/brief/baseline.md missing on lab2). Maintenance mode: plugin is shipped; keep it healthy, answer contributors, cut releases when Merlin says.
@@ -12,7 +12,7 @@ Zen UI is live in the Obsidian community store (1.1.4, GitHub release with main.
 AGENTS.md ## Unattended. Pushing a tag = public release; always gated.
 
 ## Waiting on Merlin
-1. PR #1 (drag window from file tree, off by default) — rec: request changes (describe right-click loss in the setting text; no-drag on the scrollbar; check drop onto empty space) — branch: feat/drag-file-tree (contributor fork). Build green, CSS not tested in Obsidian.
+1. PR #1 + fixes (scrollbar, drop target, setting text) — installed in vault for Merlin's manual test; 1.1.4 backup ~/zen-ui-1.1.4-backup on Mac — rec: merge if test passes — branch: pr1-fixes (worktree /tmp/claude-1000/zen-pr1, local only)
 
 ## Queue
 
@@ -35,4 +35,4 @@ validation: none (docs)
 do not touch: code, versions
 
 ## Rundown
-Init done. Moved to lab2, build green, store listing and release 1.1.4 verified. PR #1 reviewed: merge after 2 small changes; your call to post.
+Init done. Moved to lab2, build green, store listing and release 1.1.4 verified. PR #1 fixed on pr1-fixes, test build installed in Obsidian; waiting on Merlin's test.
