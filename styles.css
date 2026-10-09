@@ -42,8 +42,9 @@ body.is-hidden-frameless:not(.is-fullscreen)
   -webkit-app-region: no-drag;
 }
 /* Window buttons hidden: reclaim the space Obsidian reserves for them. */
-/* Beats Obsidian's `.mod-macos` / `.mod-macos.mod-system-rtl` rules. */
-body.mod-macos.zen-hide-traffic-lights {
+/* Beats Obsidian's `.mod-macos` / `.mod-macos.mod-system-rtl` rules and the
+   60px reserved by `zen-hide-sidebar-toggle` below. */
+:root body.mod-macos.zen-hide-traffic-lights {
   --frame-left-space: 0px;
 }
 body.zen-hide-traffic-lights .workspace-ribbon.mod-left {
@@ -115,7 +116,11 @@ body.zen-split-tab-header
   z-index: 10;
 }
 
-body.zen-split-tab-header .workspace-tabs .sidebar-toggle-button {
+/* Extra specificity: beats Obsidian's `inset-inline-end: var(--frame-right-space)`. */
+body.zen-split-tab-header
+  .workspace-tabs
+  .workspace-tab-header-container
+  .sidebar-toggle-button:is(.mod-left, .mod-right) {
   right: 4px;
 }
 body.zen-split-tab-header .workspace-tabs .workspace-tab-header-tab-list {
