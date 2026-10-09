@@ -42,11 +42,17 @@ body.is-hidden-frameless:not(.is-fullscreen)
   -webkit-app-region: no-drag;
 }
 /* Empty space in the file explorer drags the window too. Files and folders
-   stay clickable and draggable. */
-body.zen-drag-file-tree.is-hidden-frameless:not(.is-fullscreen):not(.is-grabbing)
+   stay clickable and draggable. The region sits on the tree root inside the
+   scroll container, not on the container: Chromium ignores app-region on the
+   scrollbar, so a drag region on the container would move the window instead
+   of scrolling. min-height keeps the empty space below the last item grabbable.
+   Off during an HTML5 drag so drops on empty space still reach Obsidian. */
+body.zen-drag-file-tree.is-hidden-frameless:not(.is-fullscreen):not(.is-grabbing):not(.zen-html-dragging)
   .workspace-split:not(.mod-root)
   .workspace-leaf-content[data-type="file-explorer"]
-  .nav-files-container {
+  .nav-files-container
+  > div {
+  min-height: 100%;
   -webkit-app-region: drag;
 }
 body.zen-drag-file-tree.is-hidden-frameless:not(.is-fullscreen)

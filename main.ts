@@ -232,7 +232,7 @@ const TOGGLES: ToggleDef[] = [
     className: "zen-drag-file-tree",
     when: "on",
     name: "Drag window from file tree",
-    desc: "Empty space in the file explorer moves the window, like a title bar. Files and folders stay clickable.",
+    desc: "Empty space in the file explorer moves the window, like a title bar. Right-click on empty space won't open the menu.",
     group: "Window",
   },
   {
@@ -344,6 +344,19 @@ export default class ObsidianZenPlugin extends Plugin {
     this.registerView(SYNC_VIEW_TYPE, (leaf) => new SyncView(leaf));
 
     this.registerEditorExtension(buildScrollOffsetExtension(this));
+
+    // Drag regions swallow HTML5 drag events, so switch them off for the whole
+    // drag. That keeps drops on empty file-tree space (move to vault root) working.
+    this.registerDomEvent(document, "dragstart", () =>
+      document.body.classList.add("zen-html-dragging"),
+    );
+    this.registerDomEvent(document, "dragend", () =>
+      document.body.classList.remove("zen-html-dragging"),
+    );
+    this.registerDomEvent(document, "drop", () =>
+      document.body.classList.remove("zen-html-dragging"),
+    );
+    this.register(() => document.body.classList.remove("zen-html-dragging"));
 
     this.addCommand({
       id: "zenmode-toggle",
