@@ -1,6 +1,6 @@
 {
   "name": "zen-ui",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "description": "make it zen! hide all clutter - focus on what's important.",
   "main": "main.js",
   "scripts": {
