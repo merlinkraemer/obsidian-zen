@@ -27,29 +27,24 @@ body.zen-tab-header-bottom
 }
 
 /* === Window frame (macOS hidden title bar) ===
-   With the tab bar moved to the bottom, a left sidebar still needs room for
-   the traffic lights. The right sidebar has none, so it keeps its full height. */
-body.is-hidden-frameless:not(.is-fullscreen).zen-tab-header-bottom
-  .workspace-tabs.mod-top-left-space {
-  position: relative;
-  padding-top: var(--header-height);
-}
-body.is-hidden-frameless:not(.is-fullscreen).zen-tab-header-bottom
-  .workspace-tabs.mod-top-left-space::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: var(--header-height);
+   No title bar is left to grab, so the empty part of each sidebar tab bar
+   drags the window. Tabs and buttons inside it stay clickable. */
+body.is-hidden-frameless:not(.is-fullscreen)
+  .workspace-split:not(.mod-root)
+  .workspace-tab-header-container {
   -webkit-app-region: drag;
+}
+body.is-hidden-frameless:not(.is-fullscreen)
+  .workspace-split:not(.mod-root)
+  .workspace-tab-header-container
+  :is(.workspace-tab-header, .clickable-icon, .sidebar-toggle-button) {
+  -webkit-app-region: no-drag;
 }
 /* The bottom bar no longer sits next to the traffic lights. */
 body.is-hidden-frameless:not(.is-fullscreen).zen-tab-header-bottom
   .workspace-tabs.mod-top-left-space
   > .workspace-tab-header-container {
   padding-left: var(--size-4-2);
-  -webkit-app-region: no-drag;
 }
 
 /* === Split tab header — tabs at top, action icons pinned to bottom ===
