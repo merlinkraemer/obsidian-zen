@@ -1,15 +1,16 @@
 # Zen UI
 
-Less clutter, more Zen. Make Obsidian as minimal as you want.
+Hide the parts of Obsidian you don't use.
 
 ## Features
 
-- **Less chrome** — hide sidebars, toolbars, padding, and other distractions with simple toggles in settings
-- **Git sync** — check status, pull, push, and sync from a dedicated sidebar tab (requires [Git](https://github.com/Vinzent03/obsidian-git))
-- **Daily notes** — open today's note right from the sidebar
-- **Sidebar tabs** — customize the default tabs
-- **More breathing room** — adjust file-explorer spacing and scroll offset
-- **Zen mode** — run `zenmode toggle` to go fullscreen and hide everything but what matters
+- **Hide UI:** turn off sidebars, toolbars, tab bars, padding and other UI, one toggle each.
+- **Sidebar tabs:** choose which tabs the sidebar opens with.
+- **Daily note button:** open today's note from the sidebar.
+- **Spacing:** adjust file explorer spacing and editor scroll offset.
+- **Window drag (optional):** move the window by dragging empty space in the file explorer.
+- **Zen mode:** run `zenmode toggle` to go fullscreen with only the note showing.
+- **Git sync (optional, off by default):** a sidebar tab with status, pull and push. Needs the [Git](https://github.com/Vinzent03/obsidian-git) plugin.
 
 ## Install
 
