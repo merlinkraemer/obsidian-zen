@@ -1,6 +1,6 @@
 # obsidian-zen — state
 
-_Updated: 2026-10-22 10:52 by orchestrator. Live state only, max ~80 lines. History → docs/journal.md._
+_Updated: 2026-10-22 10:58 by orchestrator. Live state only, max ~80 lines. History → docs/journal.md._
 
 ## Direction
 Not in Compass (~/dev/brief/baseline.md missing on lab2). Maintenance mode: plugin is shipped; keep it healthy, answer contributors, cut releases when Merlin says.
@@ -40,11 +40,11 @@ acceptance: all settings reachable, no behavior change, native look, build green
 validation: npm ci && npm run build; manual look by Merlin
 do not touch: setting keys/defaults, release files
 
-### Q5 Git sync tab opt-in [running] [box]
+### Q5 Git sync tab opt-in [landed] [box]
 goal: sync tab off by default; never shown without the obsidian-git plugin enabled
 acceptance: new installs see no sync tab; existing users without Git lose the error tab; Git users keep it
 validation: npm ci && npm run build; manual test by Merlin
 do not touch: other settings, settings tabs layout
 
 ## Rundown
-~700 downloads (Merlin, 2026-10-22). Reddit feedback: theme-only option, split Git into its own plugin. Decided: keep one plugin, Git tab opt-in (Q5 running).
+~700 downloads (Merlin, 2026-10-22). Reddit feedback: theme-only option, split Git into its own plugin. Decided: keep one plugin, Git tab opt-in, released 1.1.7. Queue empty.

@@ -14,3 +14,4 @@
 2026-10-09 13:26 orchestrator Q2 landed: .github/workflows/ci.yml (build on PR + main), YAML + build verified
 2026-10-09 13:26 orchestrator Q3 landed: docs/RELEASE.md
 2026-10-22 10:52 orchestrator Q5 spawn: git sync tab opt-in (Merlin decided: keep one plugin, don't split)
+2026-10-22 10:58 orchestrator Q5 landed: git sync opt-in (dc6571c), released 1.1.7 with Merlin's go
