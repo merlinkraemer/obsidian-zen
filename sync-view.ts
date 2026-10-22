@@ -2,7 +2,7 @@ import { ItemView, Notice, WorkspaceLeaf, setIcon } from "obsidian";
 
 export const SYNC_VIEW_TYPE = "zen-sync";
 
-const GIT_PLUGIN_ID = "obsidian-git";
+export const GIT_PLUGIN_ID = "obsidian-git";
 
 /** The parts of the Git plugin's git manager this view reads. All git work happens in the Git plugin. */
 type GitManager = {

@@ -10,7 +10,7 @@ import {
   WorkspaceSplit,
   setIcon,
 } from "obsidian";
-import { SyncView, SYNC_VIEW_TYPE } from "./sync-view";
+import { SyncView, SYNC_VIEW_TYPE, GIT_PLUGIN_ID } from "./sync-view";
 import { EditorView, ViewPlugin, ViewUpdate } from "@codemirror/view";
 import { Prec } from "@codemirror/state";
 
@@ -63,7 +63,7 @@ const DEFAULT_SETTINGS: ZenSettings = {
   dailyNoteButton: true,
   showFilesTab: true,
   showSearchTab: true,
-  showSyncTab: true,
+  showSyncTab: false,
   showNewTab: true,
   showTabList: true,
   showSidebarToggle: true,
@@ -114,8 +114,8 @@ const TOGGLES: ToggleDef[] = [
   { key: "showSearchTab", name: "Search", desc: "Search tab.", group: "Sidebar tabs" },
   {
     key: "showSyncTab",
-    name: "Sync",
-    desc: "Git sync status with pull and push. Requires the Git community plugin.",
+    name: "Git sync",
+    desc: "Git status with pull and push. Needs the Git community plugin.",
     group: "Sidebar tabs",
   },
   {
@@ -413,10 +413,15 @@ export default class ObsidianZenPlugin extends Plugin {
     await this.syncTabVisibility();
   }
 
+  shouldShowSyncTab() {
+    const plugins = (this.app as unknown as { plugins: { enabledPlugins: Set<string> } }).plugins;
+    return this.settings.showSyncTab && plugins.enabledPlugins.has(GIT_PLUGIN_ID);
+  }
+
   async syncTabVisibility() {
     const ws = this.app.workspace;
     const leaves = ws.getLeavesOfType(SYNC_VIEW_TYPE);
-    if (!this.settings.showSyncTab) {
+    if (!this.shouldShowSyncTab()) {
       leaves.forEach((l) => l.detach());
     } else {
       await this.placeSyncTab();
@@ -535,7 +540,7 @@ export default class ObsidianZenPlugin extends Plugin {
     const allowed = new Set<string>();
     if (this.settings.showFilesTab) allowed.add("file-explorer");
     if (this.settings.showSearchTab) allowed.add("search");
-    if (this.settings.showSyncTab) allowed.add(SYNC_VIEW_TYPE);
+    if (this.shouldShowSyncTab()) allowed.add(SYNC_VIEW_TYPE);
 
     const sideLeaves: WorkspaceLeaf[] = [];
     ws.iterateAllLeaves((leaf) => {
@@ -553,7 +558,7 @@ export default class ObsidianZenPlugin extends Plugin {
     };
     if (this.settings.showFilesTab) await ensure("file-explorer", true);
     if (this.settings.showSearchTab) await ensure("search", false);
-    if (this.settings.showSyncTab) await this.placeSyncTab();
+    if (this.shouldShowSyncTab()) await this.placeSyncTab();
 
     if (this.settings.showFilesTab) {
       const fe = ws.getLeavesOfType("file-explorer")[0];
