@@ -14,16 +14,17 @@ Hide the parts of Obsidian you don't use.
 
 ## Install
 
-**Community plugins:** Search for **Zen UI** in Obsidian.
+**Community plugins:** search for **Zen UI** in Obsidian.
 
-**Manual:** Download `main.js`, `manifest.json`, and `styles.css` from the latest [release](https://github.com/merlinkraemer/obsidian-zen/releases/latest) and place them in `<vault>/.obsidian/plugins/zen-ui/`.
+**Manual:** download `main.js`, `manifest.json` and `styles.css` from the latest [release](https://github.com/merlinkraemer/obsidian-zen/releases/latest) into `<vault>/.obsidian/plugins/zen-ui/`.
 
-**BRAT:** Add `merlinkraemer/obsidian-zen`.
+**BRAT:** add `merlinkraemer/obsidian-zen`.
 
 ## Disclosures
 
-- The sync tab reads status, branch, and the last commit through the Git plugin. Zen UI never runs Git or shell commands itself and makes no network requests.
-- Pull, push, commit, and fetch are handled by the Git plugin. Zen UI never writes to your repository directly.
+- The Git sync tab reads status, branch and the last commit through the Git plugin.
+- Pull, push, commit and fetch go through the Git plugin. Zen UI never writes to your repository.
+- Zen UI runs no shell commands and makes no network requests.
 
 ## License
 
