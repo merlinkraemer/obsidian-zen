@@ -13,7 +13,8 @@ AGENTS.md ## Unattended. Pushing a tag = public release; always gated.
 
 ## Waiting on Merlin
 1. Q7 reset button + "Only in Zen mode": test in Obsidian, then merge - rec: merge after your check (steps in .agent/q7-check.md) - branch: drain/Q7-20261106
-2. Issue #3 reply draft (.agent/issue-3-reply.md): post after release - rec: post as is
+2. Q6 Windows buttons fix (#2): untestable here; ship in next release, ask author to test - rec: release with Q7 - branch: drain/Q6b-20261106
+3. Issue #3 reply draft (.agent/issue-3-reply.md): post after release - rec: post as is
 
 ## Queue
 
@@ -47,7 +48,7 @@ acceptance: new installs see no sync tab; existing users without Git lose the er
 validation: npm ci && npm run build; manual test by Merlin
 do not touch: other settings, settings tabs layout
 
-### Q6 Windows window buttons clickable [running] [box]
+### Q6 Windows window buttons clickable [blocked: release + author test] [box]
 goal: fix merlinkraemer/obsidian-zen#2: minimize (and close/maximize) clickable on Windows in default Zen UI
 acceptance: root cause named (likely a drag region over .titlebar-button-container); window buttons no-drag on Windows/Linux frameless; macOS unchanged
 validation: npm ci && npm run build; Windows test by the issue author (we have no Windows)

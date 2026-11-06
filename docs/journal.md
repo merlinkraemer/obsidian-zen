@@ -27,3 +27,5 @@
 2026-11-06 02:00 orch-worker Q6 cost: $0.1388 (sonnet) — ✅ **Done** - Window buttons set to no-drag on Windows/Linux frameless. macOS excluded. It is a 5-line CSS rule in `styles.css`. - Root cause: the sidebar tab-ba [branch drain/Q6-20261106]
 2026-11-06 02:01 orchestrator Q6 failed: 7b03beb adds no-drag Obsidian already has (checked app.css 1.15); cost $0.14
 2026-11-06 02:01 orchestrator Q6 spawn: retry sonnet/high with root cause (view-header drag under window buttons when root tabs hidden), branch drain/Q6b-20261106
+2026-11-06 02:02 orch-worker Q6 cost: $0.2154 (sonnet) — ✅ **Done** - Fix: in `styles.css`, the top-right note header now has a no-drag strip over the window buttons. It also has right padding, mirroring Obsidian's ow [branch drain/Q6b-20261106]
+2026-11-06 02:03 orchestrator Q6 blocked: 31373b2 on drain/Q6b-20261106 (no-drag strip + padding on top-right view header), build rerun green, titlebar z-index checked in app.css; needs Windows test. cost: $0.21
