@@ -24,3 +24,6 @@
 2026-11-06 01:58 orch-worker Q7 cost: $0.4986 (sonnet) — RESULT: both features are built and committed, but I couldn't run them in Obsidian. Build is green. ✅ **Done** - "Only in Zen mode" toggle (off by default, so e [branch drain/Q7-20261106]
 2026-11-06 01:58 orchestrator Q7 blocked: built a4c0899 on drain/Q7-20261106, build rerun green; user-visible, waits on Merlin's Obsidian test. cost: $0.50
 2026-11-06 01:58 orchestrator Q6 spawn: credit run sonnet/medium, budget $3
+2026-11-06 02:00 orch-worker Q6 cost: $0.1388 (sonnet) — ✅ **Done** - Window buttons set to no-drag on Windows/Linux frameless. macOS excluded. It is a 5-line CSS rule in `styles.css`. - Root cause: the sidebar tab-ba [branch drain/Q6-20261106]
+2026-11-06 02:01 orchestrator Q6 failed: 7b03beb adds no-drag Obsidian already has (checked app.css 1.15); cost $0.14
+2026-11-06 02:01 orchestrator Q6 spawn: retry sonnet/high with root cause (view-header drag under window buttons when root tabs hidden), branch drain/Q6b-20261106
