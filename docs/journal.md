@@ -16,3 +16,6 @@
 2026-10-22 10:52 orchestrator Q5 spawn: git sync tab opt-in (Merlin decided: keep one plugin, don't split)
 2026-10-22 10:58 orchestrator Q5 landed: git sync opt-in (dc6571c), released 1.1.7 with Merlin's go
 2026-10-22 11:01 orchestrator - landed: README rewritten (no em dashes, plainer), pushed with Merlin's go
+2026-11-06 01:33 orchestrator - resumed: thread moved lab2 -> dev (rsync, npm ci + build green at c9e378c); lab2 copy left in place
+2026-11-06 01:33 orchestrator Q6 followup: new issue #2 (Windows minimize button), queued
+2026-11-06 01:33 orchestrator Q7 followup: new issue #3 (changes only in Zen mode), decision to Merlin

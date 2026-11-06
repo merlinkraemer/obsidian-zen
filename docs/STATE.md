@@ -1,9 +1,9 @@
 # obsidian-zen — state
 
-_Updated: 2026-10-22 10:58 by orchestrator. Live state only, max ~80 lines. History → docs/journal.md._
+_Updated: 2026-11-06 by orchestrator on dev. Live state only, max ~80 lines. History → docs/journal.md._
 
 ## Direction
-Not in Compass (~/dev/brief/baseline.md missing on lab2). Maintenance mode: plugin is shipped; keep it healthy, answer contributors, cut releases when Merlin says.
+Not in Compass (~/dev/brief/baseline.md missing on dev). Thread runs on dev since 2026-11-06 (moved from lab2; lab2 copy left in place). Maintenance mode: plugin is shipped; keep it healthy, answer contributors, cut releases when Merlin says.
 
 ## Ship target
 Zen UI is live in the Obsidian community store (1.1.4, GitHub release with main.js/manifest.json/styles.css). Done for the current queue: PR #1 decided, CI builds every PR, release steps written down.
@@ -12,7 +12,8 @@ Zen UI is live in the Obsidian community store (1.1.4, GitHub release with main.
 AGENTS.md ## Unattended. Pushing a tag = public release; always gated.
 
 ## Waiting on Merlin
-(none)
+1. Issue #3 (hsandt): plugin hides editor tab bar etc. on install; wants changes only in Zen mode. Answer and direction - rec: keep always-on design, add an "Obsidian defaults" reset in settings + reply on the issue; no two-level mode yet - branch: none yet
+2. Issue #2 (benedekfeke): minimize button not clickable on Windows - rec: run Q6 - branch: none yet
 
 ## Queue
 
@@ -45,6 +46,22 @@ goal: sync tab off by default; never shown without the obsidian-git plugin enabl
 acceptance: new installs see no sync tab; existing users without Git lose the error tab; Git users keep it
 validation: npm ci && npm run build; manual test by Merlin
 do not touch: other settings, settings tabs layout
+
+### Q6 Windows window buttons clickable [queued] [box]
+goal: fix merlinkraemer/obsidian-zen#2: minimize (and close/maximize) clickable on Windows in default Zen UI
+acceptance: root cause named (likely a drag region over .titlebar-button-container); window buttons no-drag on Windows/Linux frameless; macOS unchanged
+validation: npm ci && npm run build; Windows test by the issue author (we have no Windows)
+may write: styles.css, main.ts (only if needed)
+do not touch: settings keys/defaults, release files, GitHub
+timebox: 45 min
+
+### Q7 Issue #3 response [queued] [box]
+goal: answer to merlinkraemer/obsidian-zen#3 per Merlin's pick (Waiting on Merlin 1)
+acceptance: draft issue reply in docs/; code on a branch if Merlin picks a code option
+validation: npm ci && npm run build
+may write: main.ts, styles.css, README.md, docs/
+do not touch: GitHub (no comment), release files
+timebox: 60 min
 
 ## Rundown
 ~700 downloads (Merlin, 2026-10-22). Reddit feedback: theme-only option, split Git into its own plugin. Decided: keep one plugin, Git tab opt-in, released 1.1.7. Queue empty.
