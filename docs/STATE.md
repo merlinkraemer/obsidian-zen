@@ -12,8 +12,7 @@ Zen UI is live in the Obsidian community store (1.1.4, GitHub release with main.
 AGENTS.md ## Unattended. Pushing a tag = public release; always gated.
 
 ## Waiting on Merlin
-1. Issue #3 (hsandt): plugin hides editor tab bar etc. on install; wants changes only in Zen mode. Answer and direction - rec: keep always-on design, add an "Obsidian defaults" reset in settings + reply on the issue; no two-level mode yet - branch: none yet
-2. Issue #2 (benedekfeke): minimize button not clickable on Windows - rec: run Q6 - branch: none yet
+(none)
 
 ## Queue
 
@@ -55,12 +54,12 @@ may write: styles.css, main.ts (only if needed)
 do not touch: settings keys/defaults, release files, GitHub
 timebox: 45 min
 
-### Q7 Issue #3 response [queued] [box]
-goal: answer to merlinkraemer/obsidian-zen#3 per Merlin's pick (Waiting on Merlin 1)
-acceptance: draft issue reply in docs/; code on a branch if Merlin picks a code option
+### Q7 Issue #3: reset button + Zen-only mode [queued] [box]
+goal: answer merlinkraemer/obsidian-zen#3 (Merlin decided 2026-11-06): (a) settings button that resets every toggle to Obsidian's own look; (b) option "Only in Zen mode": plugin changes apply only while Zen mode is toggled on, otherwise Obsidian looks default
+acceptance: reset + option in settings; option off = today's behavior; option on = no plugin changes until the Zenmode toggle command, all of them while on, clean restore when off (incl. ribbon/view header vault config, window buttons, reload while in Zen); draft issue reply in docs/issue-3-reply.md
 validation: npm ci && npm run build
-may write: main.ts, styles.css, README.md, docs/
-do not touch: GitHub (no comment), release files
+may write: main.ts, styles.css, README.md, docs/issue-3-reply.md
+do not touch: existing setting keys/defaults, release files, GitHub
 timebox: 60 min
 
 ## Rundown
