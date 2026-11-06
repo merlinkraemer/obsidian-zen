@@ -19,3 +19,5 @@
 2026-11-06 01:33 orchestrator - resumed: thread moved lab2 -> dev (rsync, npm ci + build green at c9e378c); lab2 copy left in place
 2026-11-06 01:33 orchestrator Q6 followup: new issue #2 (Windows minimize button), queued
 2026-11-06 01:33 orchestrator Q7 followup: new issue #3 (changes only in Zen mode), decision to Merlin
+2026-11-06 01:55 orchestrator Q7 decided: Merlin picked reset button + "Only in Zen mode" option
+2026-11-06 01:55 orchestrator Q7 spawn: credit run sonnet/high, budget $5
