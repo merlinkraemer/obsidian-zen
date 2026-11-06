@@ -12,7 +12,7 @@ Zen UI is live in the Obsidian community store (1.1.4, GitHub release with main.
 AGENTS.md ## Unattended. Pushing a tag = public release; always gated.
 
 ## Waiting on Merlin
-1. Q7 reset button + "Only in Zen mode": test in Obsidian, then merge - rec: merge after your check (steps in .agent/q7-check.md) - branch: drain/Q7-20261106
+1. Q7 reset button + "Only in Zen mode": installed in Mac vault (test/q6-q7 6521d6a, backup ~/dev/build/zen-ui-backup-20261106 on mbp); test, then merge - rec: merge after your check (steps in .agent/q7-check.md) - branch: drain/Q7-20261106
 2. Q6 Windows buttons fix (#2): untestable here; ship in next release, ask author to test - rec: release with Q7 - branch: drain/Q6b-20261106
 3. Issue #3 reply draft (.agent/issue-3-reply.md): post after release - rec: post as is
 
