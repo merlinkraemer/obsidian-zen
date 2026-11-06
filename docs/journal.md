@@ -21,3 +21,6 @@
 2026-11-06 01:33 orchestrator Q7 followup: new issue #3 (changes only in Zen mode), decision to Merlin
 2026-11-06 01:55 orchestrator Q7 decided: Merlin picked reset button + "Only in Zen mode" option
 2026-11-06 01:55 orchestrator Q7 spawn: credit run sonnet/high, budget $5
+2026-11-06 01:58 orch-worker Q7 cost: $0.4986 (sonnet) — RESULT: both features are built and committed, but I couldn't run them in Obsidian. Build is green. ✅ **Done** - "Only in Zen mode" toggle (off by default, so e [branch drain/Q7-20261106]
+2026-11-06 01:58 orchestrator Q7 blocked: built a4c0899 on drain/Q7-20261106, build rerun green; user-visible, waits on Merlin's Obsidian test. cost: $0.50
+2026-11-06 01:58 orchestrator Q6 spawn: credit run sonnet/medium, budget $3

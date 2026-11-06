@@ -12,7 +12,8 @@ Zen UI is live in the Obsidian community store (1.1.4, GitHub release with main.
 AGENTS.md ## Unattended. Pushing a tag = public release; always gated.
 
 ## Waiting on Merlin
-(none)
+1. Q7 reset button + "Only in Zen mode": test in Obsidian, then merge - rec: merge after your check (steps in .agent/q7-check.md) - branch: drain/Q7-20261106
+2. Issue #3 reply draft (.agent/issue-3-reply.md): post after release - rec: post as is
 
 ## Queue
 
@@ -46,7 +47,7 @@ acceptance: new installs see no sync tab; existing users without Git lose the er
 validation: npm ci && npm run build; manual test by Merlin
 do not touch: other settings, settings tabs layout
 
-### Q6 Windows window buttons clickable [queued] [box]
+### Q6 Windows window buttons clickable [running] [box]
 goal: fix merlinkraemer/obsidian-zen#2: minimize (and close/maximize) clickable on Windows in default Zen UI
 acceptance: root cause named (likely a drag region over .titlebar-button-container); window buttons no-drag on Windows/Linux frameless; macOS unchanged
 validation: npm ci && npm run build; Windows test by the issue author (we have no Windows)
@@ -54,7 +55,7 @@ may write: styles.css, main.ts (only if needed)
 do not touch: settings keys/defaults, release files, GitHub
 timebox: 45 min
 
-### Q7 Issue #3: reset button + Zen-only mode [queued] [box]
+### Q7 Issue #3: reset button + Zen-only mode [blocked: Merlin test]  [box]
 goal: answer merlinkraemer/obsidian-zen#3 (Merlin decided 2026-11-06): (a) settings button that resets every toggle to Obsidian's own look; (b) option "Only in Zen mode": plugin changes apply only while Zen mode is toggled on, otherwise Obsidian looks default
 acceptance: reset + option in settings; option off = today's behavior; option on = no plugin changes until the Zenmode toggle command, all of them while on, clean restore when off (incl. ribbon/view header vault config, window buttons, reload while in Zen); draft issue reply in docs/issue-3-reply.md
 validation: npm ci && npm run build
