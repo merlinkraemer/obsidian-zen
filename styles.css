@@ -274,6 +274,27 @@ body.zen-hide-root-tabs.is-hidden-frameless .mod-root .view-header-breadcrumb,
 body.zen-hide-root-tabs.is-hidden-frameless .mod-root .view-actions {
   -webkit-app-region: no-drag;
 }
+/* Windows/Linux: the window buttons sit over the top-right view header.
+   Obsidian keeps that corner no-drag with a strip on the (now hidden) tab
+   bar; the drag region above would swallow clicks on the buttons. */
+body.zen-hide-root-tabs.is-hidden-frameless:not(.is-fullscreen):not(.mod-macos)
+  .mod-root
+  .workspace-tabs.mod-top-right-space
+  .view-header {
+  padding-right: calc(var(--size-4-2) + var(--frame-right-space));
+}
+body.zen-hide-root-tabs.is-hidden-frameless:not(.is-fullscreen):not(.mod-macos)
+  .mod-root
+  .workspace-tabs.mod-top-right-space
+  .view-header::after {
+  -webkit-app-region: no-drag;
+  content: "";
+  height: 100%;
+  right: 0;
+  top: 0;
+  position: absolute;
+  width: var(--frame-right-space);
+}
 body.zen-hide-status-bar .status-bar {
   display: none;
 }

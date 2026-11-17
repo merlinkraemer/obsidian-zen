@@ -4,6 +4,7 @@ import {
   Platform,
   Plugin,
   PluginSettingTab,
+  Modal,
   Setting,
   SettingDefinitionItem,
   WorkspaceLeaf,
@@ -14,7 +15,11 @@ import { SyncView, SYNC_VIEW_TYPE, GIT_PLUGIN_ID } from "./sync-view";
 import { EditorView, ViewPlugin, ViewUpdate } from "@codemirror/view";
 import { Prec } from "@codemirror/state";
 
+type VaultBackup = { showRibbon?: boolean; showViewHeader?: boolean };
+
 interface ZenSettings {
+  onlyInZenMode: boolean;
+  zenBackup?: VaultBackup;
   // Sidebar layout
   tabHeaderBottom: boolean;
   tabHeaderRightAlign: boolean;
@@ -54,6 +59,7 @@ interface ZenSettings {
 }
 
 const DEFAULT_SETTINGS: ZenSettings = {
+  onlyInZenMode: false,
   tabHeaderBottom: true,
   tabHeaderRightAlign: true,
   splitTabHeader: false,
@@ -83,6 +89,41 @@ const DEFAULT_SETTINGS: ZenSettings = {
   scrollOffsetPercentage: true,
   scrollOffsetValue: "25",
   showSearchSuggestions: false,
+  showSearchCounts: true,
+  showModalInstructions: true,
+};
+
+const OBSIDIAN_DEFAULTS: Omit<
+  ZenSettings,
+  "onlyInZenMode" | "zenBackup" | "scrollOffsetPercentage" | "scrollOffsetValue"
+> = {
+  tabHeaderBottom: false,
+  tabHeaderRightAlign: false,
+  splitTabHeader: false,
+  roomySidebar: false,
+  showTreeLines: true,
+  defaultLeftSidebarTabs: false,
+  dailyNoteButton: false,
+  showFilesTab: true,
+  showSearchTab: true,
+  showSyncTab: false,
+  showNewTab: true,
+  showTabList: true,
+  showSidebarToggle: true,
+  showFileNavHeader: true,
+  showRootTabBar: true,
+  showRibbon: true,
+  showViewHeader: true,
+  dragFileTree: false,
+  showTrafficLights: true,
+  showStatusBar: true,
+  showVaultName: true,
+  showScrollbars: true,
+  showTooltips: true,
+  highlightActiveLine: true,
+  showPropertiesReading: true,
+  scrollOffsetEnabled: false,
+  showSearchSuggestions: true,
   showSearchCounts: true,
   showModalInstructions: true,
 };
@@ -336,6 +377,7 @@ const GROUP_ORDER: Group[] = [
 
 export default class ObsidianZenPlugin extends Plugin {
   declare settings: ZenSettings;
+  zenActive = false;
 
   async onload() {
     await this.loadSettings();
@@ -358,6 +400,10 @@ export default class ObsidianZenPlugin extends Plugin {
     );
     this.register(() => document.body.classList.remove("zen-html-dragging"));
 
+    this.registerDomEvent(document, "fullscreenchange", () => {
+      if (!document.fullscreenElement) this.setZenActive(false);
+    });
+
     this.addCommand({
       id: "zenmode-toggle",
       name: "Zenmode toggle",
@@ -365,7 +411,7 @@ export default class ObsidianZenPlugin extends Plugin {
     });
 
     this.app.workspace.onLayoutReady(() => {
-      if (this.settings.defaultLeftSidebarTabs) {
+      if (this.effectiveSettings().defaultLeftSidebarTabs) {
         void this.ensureDefaultSidebarTabs();
       } else {
         void this.syncTabVisibility();
@@ -375,7 +421,7 @@ export default class ObsidianZenPlugin extends Plugin {
 
     this.registerEvent(
       this.app.workspace.on("window-open", (_w, win) =>
-        setWindowButtons(win, this.settings.showTrafficLights)
+        setWindowButtons(win, this.effectiveSettings().showTrafficLights)
       )
     );
 
@@ -389,9 +435,26 @@ export default class ObsidianZenPlugin extends Plugin {
       if (t.className) document.body.classList.remove(t.className);
     }
     this.removeDailyNoteButtons();
+    if (this.settings.onlyInZenMode) {
+      this.zenActive = false;
+      this.syncVaultConfig();
+    } else {
+      this.restoreVaultDefaults();
+    }
+    setWindowButtons(window, true);
+  }
+
+  restoreVaultDefaults() {
     if (!this.settings.showRibbon) this.setVaultConfig("showRibbon", true);
     if (!this.settings.showViewHeader) this.setVaultConfig("showViewHeader", true);
-    setWindowButtons(window, true);
+  }
+
+  isStyling() {
+    return !this.settings.onlyInZenMode || this.zenActive;
+  }
+
+  effectiveSettings(): ZenSettings {
+    return this.isStyling() ? this.settings : { ...this.settings, ...OBSIDIAN_DEFAULTS };
   }
 
   getVaultConfig(key: string): unknown {
@@ -413,9 +476,38 @@ export default class ObsidianZenPlugin extends Plugin {
     await this.syncTabVisibility();
   }
 
+  async setOnlyInZenMode(on: boolean) {
+    if (on) {
+      this.restoreVaultDefaults();
+      this.zenActive = false;
+    } else {
+      this.settings.zenBackup = undefined;
+    }
+    this.settings.onlyInZenMode = on;
+    await this.saveSettings();
+  }
+
+  async resetToObsidianDefaults() {
+    Object.assign(this.settings, OBSIDIAN_DEFAULTS);
+    await this.saveSettings();
+  }
+
+  setZenActive(active: boolean) {
+    if (this.zenActive === active) return;
+    this.zenActive = active;
+    if (!this.settings.onlyInZenMode) return;
+    this.applyAll();
+    this.refreshDailyNoteButtons();
+    if (active && this.settings.defaultLeftSidebarTabs) {
+      void this.ensureDefaultSidebarTabs(false);
+    } else {
+      void this.syncTabVisibility();
+    }
+  }
+
   shouldShowSyncTab() {
     const plugins = (this.app as unknown as { plugins: { enabledPlugins: Set<string> } }).plugins;
-    return this.settings.showSyncTab && plugins.enabledPlugins.has(GIT_PLUGIN_ID);
+    return this.effectiveSettings().showSyncTab && plugins.enabledPlugins.has(GIT_PLUGIN_ID);
   }
 
   async syncTabVisibility() {
@@ -444,24 +536,45 @@ export default class ObsidianZenPlugin extends Plugin {
   }
 
   applyAll() {
-    // Use Obsidian's own settings so the window frame and layout update with them.
-    if (this.getVaultConfig("showRibbon") !== this.settings.showRibbon) {
-      this.setVaultConfig("showRibbon", this.settings.showRibbon);
-    }
-    if (this.getVaultConfig("showViewHeader") !== this.settings.showViewHeader) {
-      this.setVaultConfig("showViewHeader", this.settings.showViewHeader);
-    }
-    setWindowButtons(window, this.settings.showTrafficLights);
+    this.syncVaultConfig();
+    const s = this.effectiveSettings();
+    setWindowButtons(window, s.showTrafficLights);
     for (const t of TOGGLES) {
       if (!t.className || !t.when) continue;
-      const v = this.settings[t.key] as boolean;
+      const v = s[t.key] as boolean;
       const shouldAdd = t.when === "on" ? v : !v;
       document.body.classList.toggle(t.className, shouldAdd);
     }
   }
 
+  syncVaultConfig() {
+    const keys = ["showRibbon", "showViewHeader"] as const;
+    if (!this.settings.onlyInZenMode) {
+      for (const k of keys) {
+        if (this.getVaultConfig(k) !== this.settings[k]) this.setVaultConfig(k, this.settings[k]);
+      }
+      return;
+    }
+    const backup = (this.settings.zenBackup ??= {});
+    let changed = false;
+    for (const k of keys) {
+      if (this.zenActive) {
+        if (backup[k] === undefined) {
+          backup[k] = this.getVaultConfig(k) !== false;
+          changed = true;
+        }
+        if (this.getVaultConfig(k) !== this.settings[k]) this.setVaultConfig(k, this.settings[k]);
+      } else if (backup[k] !== undefined) {
+        this.setVaultConfig(k, backup[k]);
+        delete backup[k];
+        changed = true;
+      }
+    }
+    if (changed) void this.saveData(this.settings);
+  }
+
   calcScrollMargin(containerHeight: number, cursorHeight: number): number {
-    if (!this.settings.scrollOffsetEnabled) return 0;
+    if (!this.isStyling() || !this.settings.scrollOffsetEnabled) return 0;
     const max = (containerHeight - cursorHeight) / 2;
     const raw = parseFloat(this.settings.scrollOffsetValue);
     if (!isFinite(raw) || raw <= 0) return 0;
@@ -478,6 +591,7 @@ export default class ObsidianZenPlugin extends Plugin {
     const rightCollapsed = ws.rightSplit?.collapsed;
     const enteringZen = !isFullscreen || !leftCollapsed || !rightCollapsed;
 
+    this.setZenActive(enteringZen);
     if (enteringZen) {
       if (!leftCollapsed) ws.leftSplit?.collapse();
       if (!rightCollapsed) ws.rightSplit?.collapse();
@@ -490,7 +604,7 @@ export default class ObsidianZenPlugin extends Plugin {
   }
 
   refreshDailyNoteButtons() {
-    if (!this.settings.dailyNoteButton) {
+    if (!this.effectiveSettings().dailyNoteButton) {
       this.removeDailyNoteButtons();
       return;
     }
@@ -535,7 +649,7 @@ export default class ObsidianZenPlugin extends Plugin {
     }
   }
 
-  async ensureDefaultSidebarTabs() {
+  async ensureDefaultSidebarTabs(reveal = true) {
     const ws = this.app.workspace;
     const allowed = new Set<string>();
     if (this.settings.showFilesTab) allowed.add("file-explorer");
@@ -560,7 +674,7 @@ export default class ObsidianZenPlugin extends Plugin {
     if (this.settings.showSearchTab) await ensure("search", false);
     if (this.shouldShowSyncTab()) await this.placeSyncTab();
 
-    if (this.settings.showFilesTab) {
+    if (reveal && this.settings.showFilesTab) {
       const fe = ws.getLeavesOfType("file-explorer")[0];
       if (fe) void ws.revealLeaf(fe);
     }
@@ -636,6 +750,36 @@ const SETTINGS_TABS: { name: string; groups: Group[] }[] = [
 ];
 let activeSettingsTab = 0;
 
+class ConfirmModal extends Modal {
+  constructor(
+    app: App,
+    private message: string,
+    private confirmText: string,
+    private onConfirm: () => void
+  ) {
+    super(app);
+  }
+
+  onOpen() {
+    this.contentEl.createEl("p", { text: this.message });
+    new Setting(this.contentEl)
+      .addButton((b) => b.setButtonText("Cancel").onClick(() => this.close()))
+      .addButton((b) =>
+        b
+          .setButtonText(this.confirmText)
+          .setDestructive()
+          .onClick(() => {
+            this.close();
+            this.onConfirm();
+          })
+      );
+  }
+
+  onClose() {
+    this.contentEl.empty();
+  }
+}
+
 type SettingRow = {
   name: string;
   desc: string;
@@ -660,6 +804,44 @@ class ZenSettingTab extends PluginSettingTab {
   getSettingDefinitions(): SettingDefinitionItem[] {
     const rowsByGroup = new Map(this.groups().map((g) => [g.heading, g.rows]));
     const defs: SettingDefinitionItem[] = [
+      {
+        name: "Only in Zen mode",
+        desc: "Change nothing in Obsidian until you run the Zenmode toggle command. Everything below applies while Zen mode is on.",
+        render: (setting: Setting) => {
+          setting
+            .setName("Only in Zen mode")
+            .setDesc("Change nothing in Obsidian until you run the Zenmode toggle command. Everything below applies while Zen mode is on.")
+            .addToggle((tg) =>
+              tg.setValue(this.plugin.settings.onlyInZenMode).onChange((v) => {
+                void this.plugin.setOnlyInZenMode(v);
+              })
+            );
+        },
+      },
+      {
+        name: "Reset to Obsidian defaults",
+        desc: "Set every toggle below to Obsidian's own look.",
+        render: (setting: Setting) => {
+          setting
+            .setName("Reset to Obsidian defaults")
+            .setDesc("Set every toggle below to Obsidian's own look.")
+            .addButton((b) =>
+              b
+                .setButtonText("Reset")
+                .setDestructive()
+                .onClick(() =>
+                  new ConfirmModal(
+                    this.app,
+                    "Reset every Zen UI toggle to Obsidian's own look?",
+                    "Reset",
+                    () => {
+                      void this.plugin.resetToObsidianDefaults().then(() => this.update());
+                    }
+                  ).open()
+                )
+            );
+        },
+      },
       {
         name: "Settings sections",
         searchable: false,
