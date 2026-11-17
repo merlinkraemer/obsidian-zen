@@ -12,7 +12,7 @@ Zen UI is live in the Obsidian community store (1.1.4, GitHub release with main.
 AGENTS.md ## Unattended. Pushing a tag = public release; always gated.
 
 ## Waiting on Merlin
-(none)
+1. Q8 tab row spacing: look in the Mac test vault or .agent/q8/after.png - rec: merge, ship in next release - branch: drain/Q8-20261117
 
 ## Queue
 
@@ -62,7 +62,7 @@ may write: main.ts, styles.css, README.md, docs/issue-3-reply.md
 do not touch: existing setting keys/defaults, release files, GitHub
 timebox: 60 min
 
-### Q8 Settings tab row spacing [running] [box]
+### Q8 Settings tab row spacing [blocked: Merlin look] [box]
 goal: tab row in Zen UI settings looks native in Obsidian 1.15 settings cards (pills touch card edge, row wraps, uneven padding; Merlin's screenshot .agent/q8/screenshot.png)
 acceptance: pills inset like other rows, even padding, tidy wrap; works on older Obsidian too; headless before/after screenshots
 validation: npm ci && npm run build
