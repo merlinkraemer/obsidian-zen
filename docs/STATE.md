@@ -12,9 +12,7 @@ Zen UI is live in the Obsidian community store (1.1.4, GitHub release with main.
 AGENTS.md ## Unattended. Pushing a tag = public release; always gated.
 
 ## Waiting on Merlin
-1. Q7 reset button + "Only in Zen mode": installed in Mac vault (test/q6-q7 6521d6a, backup ~/dev/build/zen-ui-backup-20261106 on mbp); test, then merge - rec: merge after your check (steps in .agent/q7-check.md) - branch: drain/Q7-20261106
-2. Q6 Windows buttons fix (#2): untestable here; ship in next release, ask author to test - rec: release with Q7 - branch: drain/Q6b-20261106
-3. Issue #3 reply draft (.agent/issue-3-reply.md): post after release - rec: post as is
+1. Post issue replies for #3 and #2 (drafts in .agent/issue-3-reply.md, issue-2-reply.md) - rec: post both now that 1.1.8 is out - branch: none
 
 ## Queue
 
@@ -48,7 +46,7 @@ acceptance: new installs see no sync tab; existing users without Git lose the er
 validation: npm ci && npm run build; manual test by Merlin
 do not touch: other settings, settings tabs layout
 
-### Q6 Windows window buttons clickable [blocked: release + author test] [box]
+### Q6 Windows window buttons clickable [landed] [box]
 goal: fix merlinkraemer/obsidian-zen#2: minimize (and close/maximize) clickable on Windows in default Zen UI
 acceptance: root cause named (likely a drag region over .titlebar-button-container); window buttons no-drag on Windows/Linux frameless; macOS unchanged
 validation: npm ci && npm run build; Windows test by the issue author (we have no Windows)
@@ -56,7 +54,7 @@ may write: styles.css, main.ts (only if needed)
 do not touch: settings keys/defaults, release files, GitHub
 timebox: 45 min
 
-### Q7 Issue #3: reset button + Zen-only mode [blocked: Merlin test]  [box]
+### Q7 Issue #3: reset button + Zen-only mode [landed] [box]
 goal: answer merlinkraemer/obsidian-zen#3 (Merlin decided 2026-11-06): (a) settings button that resets every toggle to Obsidian's own look; (b) option "Only in Zen mode": plugin changes apply only while Zen mode is toggled on, otherwise Obsidian looks default
 acceptance: reset + option in settings; option off = today's behavior; option on = no plugin changes until the Zenmode toggle command, all of them while on, clean restore when off (incl. ribbon/view header vault config, window buttons, reload while in Zen); draft issue reply in docs/issue-3-reply.md
 validation: npm ci && npm run build
@@ -64,5 +62,13 @@ may write: main.ts, styles.css, README.md, docs/issue-3-reply.md
 do not touch: existing setting keys/defaults, release files, GitHub
 timebox: 60 min
 
+### Q8 Settings tab row spacing [queued] [box]
+goal: tab row in Zen UI settings looks native in Obsidian 1.15 settings cards (pills touch card edge, row wraps, uneven padding; Merlin's screenshot .agent/q8/screenshot.png)
+acceptance: pills inset like other rows, even padding, tidy wrap; works on older Obsidian too; headless before/after screenshots
+validation: npm ci && npm run build
+may write: styles.css, main.ts (renderTabRow only)
+do not touch: settings keys/defaults, behavior, release files, GitHub
+timebox: 45 min
+
 ## Rundown
-~700 downloads (Merlin, 2026-10-22). Reddit feedback: theme-only option, split Git into its own plugin. Decided: keep one plugin, Git tab opt-in, released 1.1.7. Queue empty.
+~700 downloads (Merlin, 2026-10-22). Reddit feedback: theme-only option, split Git into its own plugin. Decided: keep one plugin, Git tab opt-in, released 1.1.7. 1.1.8 released 2026-11-17: Only in Zen mode, reset button, Windows window buttons fix. Next: Q8 tab spacing.

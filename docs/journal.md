@@ -31,3 +31,7 @@
 2026-11-06 02:03 orchestrator Q6 blocked: 31373b2 on drain/Q6b-20261106 (no-drag strip + padding on top-right view header), build rerun green, titlebar z-index checked in app.css; needs Windows test. cost: $0.21
 2026-11-06 02:10 orchestrator Q7 followup: test/q6-q7 6521d6a (Q7+Q6b) installed in Mac iCloud vault for Merlin's test; old files backed up on mbp ~/dev/build/zen-ui-backup-20261106
 2026-11-17 05:54 orchestrator Q7 followup: fresh test vault on mbp ~/dev/build/zen-test-vault (only zen-ui, test/q6-q7 6521d6a), opened in Obsidian
+2026-11-17 05:59 orchestrator Q7 landed: merged with Q6b at a8d17b0 after Merlin's test ("features is great publish now")
+2026-11-17 05:59 orchestrator Q6 landed: in a8d17b0, Windows unverified
+2026-11-17 05:59 orchestrator - decided: Merlin "publish now"; released 1.1.8 (d883a76), pushed main + tag
+2026-11-17 05:59 orchestrator Q8 followup: settings tab row spacing broken in Obsidian 1.15 (Merlin's screenshot), queued
