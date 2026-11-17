@@ -358,7 +358,14 @@ body.zen-hide-modal-instructions .prompt-instructions {
   margin-bottom: var(--size-4-2);
   border-bottom: 1px solid var(--background-modifier-border);
 }
+.zen-settings .setting-group .setting-item.zen-tabs {
+  row-gap: var(--size-4-1);
+  padding: var(--setting-items-padding-y) calc(var(--setting-items-padding-x) - var(--size-4-3));
+  margin-bottom: 0;
+  border-bottom: none;
+}
 .zen-settings .zen-tab {
+  padding: var(--size-4-1) var(--size-4-3);
   background: transparent;
   box-shadow: none;
   color: var(--text-muted);
