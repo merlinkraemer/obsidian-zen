@@ -62,7 +62,7 @@ may write: main.ts, styles.css, README.md, docs/issue-3-reply.md
 do not touch: existing setting keys/defaults, release files, GitHub
 timebox: 60 min
 
-### Q8 Settings tab row spacing [queued] [box]
+### Q8 Settings tab row spacing [running] [box]
 goal: tab row in Zen UI settings looks native in Obsidian 1.15 settings cards (pills touch card edge, row wraps, uneven padding; Merlin's screenshot .agent/q8/screenshot.png)
 acceptance: pills inset like other rows, even padding, tidy wrap; works on older Obsidian too; headless before/after screenshots
 validation: npm ci && npm run build

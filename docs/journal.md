@@ -35,3 +35,5 @@
 2026-11-17 05:59 orchestrator Q6 landed: in a8d17b0, Windows unverified
 2026-11-17 05:59 orchestrator - decided: Merlin "publish now"; released 1.1.8 (d883a76), pushed main + tag
 2026-11-17 05:59 orchestrator Q8 followup: settings tab row spacing broken in Obsidian 1.15 (Merlin's screenshot), queued
+2026-11-17 06:00 orchestrator - landed: 1.1.8 release workflow green, 3 assets up
+2026-11-17 06:00 orchestrator Q8 spawn: credit run sonnet/high, budget $4
