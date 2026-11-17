@@ -12,7 +12,7 @@ Zen UI is live in the Obsidian community store (1.1.4, GitHub release with main.
 AGENTS.md ## Unattended. Pushing a tag = public release; always gated.
 
 ## Waiting on Merlin
-1. Post issue replies for #3 and #2 (drafts in .agent/issue-3-reply.md, issue-2-reply.md) - rec: post both now that 1.1.8 is out - branch: none
+(none)
 
 ## Queue
 

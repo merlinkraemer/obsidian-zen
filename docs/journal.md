@@ -37,3 +37,4 @@
 2026-11-17 05:59 orchestrator Q8 followup: settings tab row spacing broken in Obsidian 1.15 (Merlin's screenshot), queued
 2026-11-17 06:00 orchestrator - landed: 1.1.8 release workflow green, 3 assets up
 2026-11-17 06:00 orchestrator Q8 spawn: credit run sonnet/high, budget $4
+2026-11-17 06:01 orchestrator - landed: replies posted on #3 and #2 (1.1.8 out, #2 asks reporter to test) with Merlin's go
