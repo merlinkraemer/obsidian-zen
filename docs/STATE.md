@@ -12,7 +12,7 @@ Zen UI is live in the Obsidian community store (1.1.4, GitHub release with main.
 AGENTS.md ## Unattended. Pushing a tag = public release; always gated.
 
 ## Waiting on Merlin
-1. Q8 tab row spacing: look in the Mac test vault or .agent/q8/after.png - rec: merge, ship in next release - branch: drain/Q8-20261117
+1. Release 1.1.9 with the tab row fix (main is local, unpushed) - rec: release now - branch: main
 
 ## Queue
 
@@ -62,7 +62,7 @@ may write: main.ts, styles.css, README.md, docs/issue-3-reply.md
 do not touch: existing setting keys/defaults, release files, GitHub
 timebox: 60 min
 
-### Q8 Settings tab row spacing [blocked: Merlin look] [box]
+### Q8 Settings tab row spacing [landed] [box]
 goal: tab row in Zen UI settings looks native in Obsidian 1.15 settings cards (pills touch card edge, row wraps, uneven padding; Merlin's screenshot .agent/q8/screenshot.png)
 acceptance: pills inset like other rows, even padding, tidy wrap; works on older Obsidian too; headless before/after screenshots
 validation: npm ci && npm run build
@@ -71,4 +71,4 @@ do not touch: settings keys/defaults, behavior, release files, GitHub
 timebox: 45 min
 
 ## Rundown
-~700 downloads (Merlin, 2026-10-22). Reddit feedback: theme-only option, split Git into its own plugin. Decided: keep one plugin, Git tab opt-in, released 1.1.7. 1.1.8 released 2026-11-17: Only in Zen mode, reset button, Windows window buttons fix. Next: Q8 tab spacing.
+~700 downloads (Merlin, 2026-10-22). Reddit feedback: theme-only option, split Git into its own plugin. Decided: keep one plugin, Git tab opt-in, released 1.1.7. 1.1.8 released 2026-11-17: Only in Zen mode, reset button, Windows window buttons fix. Q8 tab spacing merged on main, unreleased.

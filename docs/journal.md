@@ -40,3 +40,4 @@
 2026-11-17 06:01 orchestrator - landed: replies posted on #3 and #2 (1.1.8 out, #2 asks reporter to test) with Merlin's go
 2026-11-17 06:01 orch-worker Q8 cost: $0.3088 (sonnet) — RESULT: ✅ **Done** - Tab row now sits inset inside the 1.15 card, in `styles.css` only - Pill text lines up with the other rows' text; padding is even top and b [branch drain/Q8-20261117]
 2026-11-17 06:02 orchestrator Q8 blocked: f392d7c on drain/Q8-20261117, build rerun green, installed in Mac test vault; waits on Merlin's look
+2026-11-17 06:05 orchestrator Q8 landed: c9329d6 on main after Merlin's look; worktrees removed, branches kept
